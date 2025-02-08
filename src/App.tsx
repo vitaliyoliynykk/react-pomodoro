@@ -2,7 +2,7 @@ import './App.css';
 
 import { Route, Routes } from 'react-router';
 
-import PomodoroPage from './pages/pomodoro/pomodoro.page';
+import PomodoroPage from './pages/pomodoro/pomodoro-page';
 
 function App() {
   return (
