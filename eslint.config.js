@@ -6,6 +6,8 @@ import tseslint from 'typescript-eslint';
 import react from 'eslint-plugin-react';
 import eslintConfigPrettier from 'eslint-config-prettier';
 import prettier from 'eslint-plugin-prettier';
+import simpleImportSort from 'eslint-plugin-simple-import-sort';
+import unusedImports from 'eslint-plugin-unused-imports';
 
 export default tseslint.config(
   { ignores: ['dist'] },
@@ -34,6 +36,8 @@ export default tseslint.config(
       'react-refresh': reactRefresh,
       react,
       prettier,
+      'simple-import-sort': simpleImportSort,
+      'unused-imports': unusedImports,
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
@@ -44,6 +48,20 @@ export default tseslint.config(
       ...react.configs.recommended.rules,
       ...react.configs['jsx-runtime'].rules,
       'prettier/prettier': 'error',
+
+      'simple-import-sort/imports': 'warn',
+      'simple-import-sort/exports': 'warn',
+
+      'unused-imports/no-unused-imports': 'warn',
+      'unused-imports/no-unused-vars': [
+        'warn',
+        {
+          vars: 'all',
+          varsIgnorePattern: '^_',
+          args: 'after-used',
+          argsIgnorePattern: '^_',
+        },
+      ],
     },
     settings: { react: { version: '19' } },
   }

@@ -8,7 +8,9 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "format": "prettier --write ./src",
-    "lint": "eslint . --fix"
+    "lint": "eslint . --fix",
+    "prepare": "husky",
+    "test": "pnpm format && pnpm lint"
   },
   "dependencies": {
     "react": "^19.0.0",
@@ -29,6 +31,8 @@
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "eslint-plugin-unused-imports": "^4.1.4",
     "globals": "^15.14.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.4.3",
     "prettier": "^3.4.2",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.22.0",
