@@ -13,6 +13,7 @@
     "test": "pnpm format && pnpm lint"
   },
   "dependencies": {
+    "@chakra-ui/react": "^3.7.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@reduxjs/toolkit": "^2.5.1",
