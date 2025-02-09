@@ -3,10 +3,6 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   plugins: [react()],
-  resolve: {
-    alias: {
-      '@components': '/src/components',
-      '@pages': '/src/pages',
-    },
-  },
+  // TODO: Add path resolutions
+  resolve: {},
 });

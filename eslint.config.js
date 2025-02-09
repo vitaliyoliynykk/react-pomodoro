@@ -62,6 +62,7 @@ export default tseslint.config(
           argsIgnorePattern: '^_',
         },
       ],
+      'react/no-unknown-property': ['error', { ignore: ['css'] }],
     },
     settings: { react: { version: '19' } },
   }
