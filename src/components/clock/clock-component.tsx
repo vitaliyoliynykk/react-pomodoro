@@ -45,7 +45,7 @@ const ClockComponent: FC<ClockComponentPropsType> = ({
   useEffect(() => {
     setFormattedTime(formatTime(currentTime));
     setCircleFill(calculateCircleFillPercentage(currentTime, maxTime));
-  }, [currentTime]);
+  }, [currentTime, maxTime]);
 
   const formatTime = (seconds: number): string => {
     const minutes = Math.floor(seconds / 60)

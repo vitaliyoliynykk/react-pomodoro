@@ -1,10 +1,10 @@
 /** @jsxImportSource @emotion/react */
-import styled from '@emotion/styled';
+import { Button } from '@chakra-ui/react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
+import styled from '@emotion/styled';
 
 import ClockComponent from '../../components/clock/clock-component';
-import { Button } from '@chakra-ui/react';
 
 const Container = styled.div`
   width: 250px;
