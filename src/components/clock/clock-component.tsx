@@ -11,16 +11,17 @@ const Container = styled.div`
 `;
 
 const Clock = styled.div<{ circle: number }>`
-  background-color: hotpink;
+  background-color: rgb(163, 21, 59);
   border-radius: 50%;
   width: 250px;
   height: 250px;
   clip-path: circle(${(props) => props.circle}%);
+  transition: clip-path 0.5s ease-in-out;
   position: absolute;
 `;
 
 const ClockBackground = styled.div`
-  background-color: hotpink;
+  background-color: rgb(163, 21, 59);
   border-radius: 50%;
   width: 250px;
   height: 250px;
