@@ -83,6 +83,12 @@ function PomodoroPage() {
     long_break: 'Long break',
   };
 
+  const colors = {
+    pomodoro: 'rgb(163, 21, 59)',
+    short_break: 'rgb(42, 46, 170)',
+    long_break: 'rgb(42, 46, 170)',
+  };
+
   useEffect(() => {
     void dispatch(initializeConfig());
 
@@ -140,6 +146,7 @@ function PomodoroPage() {
         <ClockComponent
           currentTime={currentTime}
           maxTime={sequenceConfig[currentCycle].duration}
+          color={colors[sequenceConfig[currentCycle].type]}
         ></ClockComponent>
         <Buttons>
           <Button

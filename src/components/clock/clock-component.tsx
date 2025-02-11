@@ -10,8 +10,8 @@ const Container = styled.div`
   position: relative;
 `;
 
-const Clock = styled.div<{ circle: number }>`
-  background-color: rgb(163, 21, 59);
+const Clock = styled.div<{ circle: number; color: string }>`
+  background-color: ${(props) => props.color};
   border-radius: 50%;
   width: 250px;
   height: 250px;
@@ -20,8 +20,8 @@ const Clock = styled.div<{ circle: number }>`
   position: absolute;
 `;
 
-const ClockBackground = styled.div`
-  background-color: rgb(163, 21, 59);
+const ClockBackground = styled.div<{ color: string }>`
+  background-color: ${(props) => props.color};
   border-radius: 50%;
   width: 250px;
   height: 250px;
@@ -39,6 +39,7 @@ const Time = styled.div`
 const ClockComponent: FC<ClockComponentPropsType> = ({
   currentTime,
   maxTime,
+  color = 'rgb(163, 21, 59)',
 }) => {
   const [formattedTime, setFormattedTime] = useState<string>('00:00');
   const [circleFill, setCircleFill] = useState<number>(50);
@@ -64,8 +65,8 @@ const ClockComponent: FC<ClockComponentPropsType> = ({
 
   return (
     <Container>
-      <ClockBackground />
-      <Clock circle={circleFill} />
+      <ClockBackground color={color} />
+      <Clock circle={circleFill} color={color} />
       <Time> {formattedTime}</Time>
     </Container>
   );
