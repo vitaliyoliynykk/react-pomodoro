@@ -1,20 +1,27 @@
 /** @jsxImportSource @emotion/react */
-import { Button } from '@chakra-ui/react';
+import { Button, Spinner } from '@chakra-ui/react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import ClockComponent from '../../components/clock/clock-component';
 import { AppDispatch, RootState } from '../../store';
-import { clockTick, initializeConfig, nextCycle } from './pomodoro-slice';
+import {
+  clockTick,
+  initializeConfig,
+  nextCycle,
+  startClock,
+  stopClock,
+} from './pomodoro-slice';
 
 const HeadingContainer = styled.div`
   width: 100%;
   background-color: rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   margin-bottom: 24px;
+  padding: 12px 0px;
 `;
 
 const Heading = styled.h1`
@@ -48,7 +55,6 @@ const buttonStyle = css`
 
 function PomodoroPage() {
   const intervalRef = useRef<number | null>(null);
-  const [clockIsRunning, setClockIsRunning] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
   const sequenceConfig = useSelector(
@@ -62,6 +68,12 @@ function PomodoroPage() {
   );
   const currentTime = useSelector(
     (state: RootState) => state.pomodoro.currentTime
+  );
+  const completedToday = useSelector(
+    (state: RootState) => state.pomodoro.completedToday
+  );
+  const isClockRunning = useSelector(
+    (state: RootState) => state.pomodoro.isClockRunning
   );
 
   const intervalDuration = 1000;
@@ -84,38 +96,38 @@ function PomodoroPage() {
   useEffect(() => {
     if (currentTime === 0 && intervalRef.current) {
       clearInterval(intervalRef.current);
-      setClockIsRunning(false);
+      dispatch(stopClock());
       dispatch(nextCycle());
     }
   }, [currentTime, dispatch]);
 
-  const startClock = () => {
+  const handleStartClock = () => {
     intervalRef.current = setInterval(() => {
       dispatch(clockTick());
     }, intervalDuration);
-    setClockIsRunning(true);
+    dispatch(startClock());
   };
 
-  const stopClock = () => {
+  const handleStopClock = () => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
-      setClockIsRunning(false);
+      dispatch(stopClock());
     }
   };
 
   const skipClock = () => {
-    stopClock();
+    handleStopClock();
     dispatch(nextCycle());
   };
 
   const handleStartStop = (clockIsRunning: boolean) => {
     if (clockIsRunning) {
-      stopClock();
+      handleStopClock();
       return;
     }
 
-    startClock();
+    handleStartClock();
   };
 
   if (status === 'complete') {
@@ -123,6 +135,7 @@ function PomodoroPage() {
       <Container>
         <HeadingContainer>
           <Heading>{headings[sequenceConfig[currentCycle].type]}</Heading>
+          <div>Completed: {completedToday}</div>
         </HeadingContainer>
         <ClockComponent
           currentTime={currentTime}
@@ -133,10 +146,10 @@ function PomodoroPage() {
             variant="solid"
             css={buttonStyle}
             onClick={() => {
-              handleStartStop(clockIsRunning);
+              handleStartStop(isClockRunning);
             }}
           >
-            {clockIsRunning ? 'Stop' : 'Start'}
+            {isClockRunning ? 'Stop' : 'Start'}
           </Button>
           <Button
             variant="solid"
@@ -151,7 +164,7 @@ function PomodoroPage() {
       </Container>
     );
   } else {
-    return <h1>Loading....</h1>;
+    return <Spinner />;
   }
 }
 

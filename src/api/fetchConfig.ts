@@ -1,4 +1,4 @@
-import { DEFAULT_SEQUENCE_CONFIG } from '../constants/sequence-config';
+import { DEFAULT_SEQUENCE_CONFIG_SHORT } from '../constants/sequence-config';
 import { Sequence } from '../models/sequence';
 
 export const fetchSequenceConfig = async (): Promise<Sequence> => {
@@ -10,5 +10,5 @@ export const fetchSequenceConfig = async (): Promise<Sequence> => {
     return JSON.stringify(sequenceConfig) as unknown as Sequence;
   }
 
-  return DEFAULT_SEQUENCE_CONFIG;
+  return DEFAULT_SEQUENCE_CONFIG_SHORT;
 };

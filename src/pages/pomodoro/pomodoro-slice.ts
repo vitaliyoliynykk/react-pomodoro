@@ -10,6 +10,8 @@ interface PomodoroState {
   };
   currentCycle: number;
   currentTime: number;
+  completedToday: number;
+  isClockRunning: boolean;
 }
 
 const initialState: PomodoroState = {
@@ -19,6 +21,8 @@ const initialState: PomodoroState = {
   },
   currentCycle: 0,
   currentTime: 0,
+  completedToday: 0,
+  isClockRunning: false,
 };
 
 export const initializeConfig = createAsyncThunk(
@@ -33,11 +37,21 @@ const pomodoroSlice = createSlice({
   initialState,
   reducers: {
     nextCycle: (state) => {
+      if (state.config.data[state.currentCycle].type === 'pomodoro') {
+        state.completedToday += 1;
+      }
+
       state.currentCycle = (state.currentCycle + 1) % state.config.data.length;
       state.currentTime = state.config.data[state.currentCycle].duration;
     },
     clockTick: (state) => {
       state.currentTime -= 1;
+    },
+    startClock: (state) => {
+      state.isClockRunning = true;
+    },
+    stopClock: (state) => {
+      state.isClockRunning = false;
     },
   },
   extraReducers: (builder) => {
@@ -59,7 +73,8 @@ const pomodoroSlice = createSlice({
   },
 });
 
-export const { nextCycle, clockTick } = pomodoroSlice.actions;
+export const { nextCycle, clockTick, startClock, stopClock } =
+  pomodoroSlice.actions;
 
 const pomodoroReducer = pomodoroSlice.reducer;
 
