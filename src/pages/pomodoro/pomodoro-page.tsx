@@ -2,6 +2,7 @@ import { Spinner } from '@chakra-ui/react';
 import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import clickSound from '@/assets/sounds/click.mp3';
 import ClockComponent from '@/components/clock/clock-component';
 import { AppDispatch, RootState } from '@/store';
 
@@ -22,6 +23,7 @@ import {
 
 function PomodoroPage() {
   const intervalRef = useRef<number | null>(null);
+  const clickAudioRef = useRef(new Audio(clickSound));
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -91,17 +93,25 @@ function PomodoroPage() {
   };
 
   const skipClock = () => {
+    playClickSound();
     handleStopClock();
     dispatch(nextCycle());
   };
 
   const handleStartStop = (clockIsRunning: boolean) => {
+    playClickSound();
+
     if (clockIsRunning) {
       handleStopClock();
       return;
     }
 
     handleStartClock();
+  };
+
+  const playClickSound = () => {
+    clickAudioRef.current.currentTime = 0;
+    void clickAudioRef.current.play();
   };
 
   if (status === 'complete') {
