@@ -143,11 +143,13 @@ function PomodoroPage() {
           <Heading>{headings[sequenceConfig[currentCycle].type]}</Heading>
           <div>Completed: {completedToday}</div>
         </HeadingContainer>
+
         <ClockComponent
           currentTime={currentTime}
           maxTime={sequenceConfig[currentCycle].duration}
           color={colors[sequenceConfig[currentCycle].type]}
-        ></ClockComponent>
+        />
+
         <Buttons>
           <Button
             variant="solid"
@@ -158,6 +160,7 @@ function PomodoroPage() {
           >
             {isClockRunning ? 'Stop' : 'Start'}
           </Button>
+
           <Button
             variant="solid"
             css={buttonStyle}
