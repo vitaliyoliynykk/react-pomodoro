@@ -1,8 +1,9 @@
 import { Spinner } from '@chakra-ui/react';
-import { useEffect, useRef } from 'react';
+import { RefObject, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import clickSound from '@/assets/sounds/click.mp3';
+import alarmSound from '@/assets/sounds/clock-alarm.mp3';
 import ClockComponent from '@/components/clock/clock-component';
 import { AppDispatch, RootState } from '@/store';
 
@@ -24,6 +25,7 @@ import {
 function PomodoroPage() {
   const intervalRef = useRef<number | null>(null);
   const clickAudioRef = useRef(new Audio(clickSound));
+  const alarmAudioRef = useRef(new Audio(alarmSound));
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -71,6 +73,7 @@ function PomodoroPage() {
 
   useEffect(() => {
     if (currentTime === 0 && intervalRef.current) {
+      playSound(alarmAudioRef);
       clearInterval(intervalRef.current);
       dispatch(stopClock());
       dispatch(nextCycle());
@@ -93,13 +96,13 @@ function PomodoroPage() {
   };
 
   const skipClock = () => {
-    playClickSound();
+    playSound(clickAudioRef);
     handleStopClock();
     dispatch(nextCycle());
   };
 
   const handleStartStop = (clockIsRunning: boolean) => {
-    playClickSound();
+    playSound(clickAudioRef);
 
     if (clockIsRunning) {
       handleStopClock();
@@ -109,9 +112,9 @@ function PomodoroPage() {
     handleStartClock();
   };
 
-  const playClickSound = () => {
-    clickAudioRef.current.currentTime = 0;
-    void clickAudioRef.current.play();
+  const playSound = (audioRef: RefObject<HTMLAudioElement>) => {
+    audioRef.current.currentTime = 0;
+    void audioRef.current.play();
   };
 
   if (status === 'complete') {
