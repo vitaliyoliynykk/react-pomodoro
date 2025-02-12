@@ -6,8 +6,9 @@ import styled from '@emotion/styled';
 import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import ClockComponent from '../../components/clock/clock-component';
-import { AppDispatch, RootState } from '../../store';
+import ClockComponent from '@/components/clock/clock-component';
+import { AppDispatch, RootState } from '@/store';
+
 import {
   clockTick,
   initializeConfig,
@@ -57,6 +58,7 @@ function PomodoroPage() {
   const intervalRef = useRef<number | null>(null);
 
   const dispatch = useDispatch<AppDispatch>();
+
   const sequenceConfig = useSelector(
     (state: RootState) => state.pomodoro.config.data
   );
