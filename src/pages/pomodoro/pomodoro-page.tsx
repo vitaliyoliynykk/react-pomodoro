@@ -133,7 +133,8 @@ function PomodoroPage() {
 
         <Buttons>
           <ControlButton
-            variant="solid"
+            variant="subtle"
+            colorPalette={'teal'}
             onClick={() => {
               handleStartStop(isClockRunning);
             }}
@@ -143,9 +144,8 @@ function PomodoroPage() {
 
           <ControlButton
             variant="solid"
-            onClick={() => {
-              skipClock();
-            }}
+            disabled={!isClockRunning}
+            onClick={skipClock}
           >
             Skip
           </ControlButton>
