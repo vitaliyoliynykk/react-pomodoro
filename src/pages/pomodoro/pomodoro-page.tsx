@@ -1,8 +1,4 @@
-/** @jsxImportSource @emotion/react */
-import { Button, Spinner } from '@chakra-ui/react';
-/** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react';
-import styled from '@emotion/styled';
+import { Spinner } from '@chakra-ui/react';
 import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -16,43 +12,13 @@ import {
   startClock,
   stopClock,
 } from './pomodoro-slice';
-
-const HeadingContainer = styled.div`
-  width: 100%;
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  margin-bottom: 24px;
-  padding: 12px 0px;
-`;
-
-const Heading = styled.h1`
-  font-weight: bold;
-  width: 100%;
-  font-size: 32px;
-`;
-
-const Container = styled.div`
-  width: 250px;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-`;
-
-const Buttons = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  margin-top: 24px;
-`;
-
-const buttonStyle = css`
-  width: 50%;
-
-  &:first-child {
-    margin-right: 8px;
-  }
-`;
+import {
+  Buttons,
+  Container,
+  ControlButton,
+  Heading,
+  HeadingContainer,
+} from './styled-components';
 
 function PomodoroPage() {
   const intervalRef = useRef<number | null>(null);
@@ -153,25 +119,23 @@ function PomodoroPage() {
         />
 
         <Buttons>
-          <Button
+          <ControlButton
             variant="solid"
-            css={buttonStyle}
             onClick={() => {
               handleStartStop(isClockRunning);
             }}
           >
             {isClockRunning ? 'Stop' : 'Start'}
-          </Button>
+          </ControlButton>
 
-          <Button
+          <ControlButton
             variant="solid"
-            css={buttonStyle}
             onClick={() => {
               skipClock();
             }}
           >
             Skip
-          </Button>
+          </ControlButton>
         </Buttons>
       </Container>
     );
