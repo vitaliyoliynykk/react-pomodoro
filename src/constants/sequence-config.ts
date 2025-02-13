@@ -1,4 +1,4 @@
-import { Sequence } from '../models/sequence';
+import { Sequence } from '../models/sequence-model';
 
 export const DEFAULT_SEQUENCE_CONFIG: Sequence = [
   { duration: 1500, type: 'pomodoro' },
