@@ -4,8 +4,8 @@ import { Spinner } from '@chakra-ui/react';
 import { lazy, Suspense } from 'react';
 import { Route, Routes } from 'react-router';
 
-import Layout from './components/layout/layout-component';
 import PomodoroPage from './pages/pomodoro/pomodoro-page';
+import Layout from './shared/components/layout/layout-component';
 
 const SettingsPage = lazy(() => import('./pages/settings/settings-page'));
 

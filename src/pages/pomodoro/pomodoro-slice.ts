@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { fetchSequenceConfig } from '@/api/fetchConfig';
-import { Sequence } from '@/models';
+import { Sequence } from '@/shared/models';
+import { fetchSequenceConfig } from '@/shared/requests/fetchConfig';
 
 interface PomodoroState {
   config: {

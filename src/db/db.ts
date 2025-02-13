@@ -1,6 +1,6 @@
 import { IDBPDatabase, openDB } from 'idb';
 
-import { CONFIG_STORE_NAME, PomodoroDBModel } from '../models';
+import { CONFIG_STORE_NAME, PomodoroDBModel } from '../shared/models';
 
 const DB_NAME = 'PomodoroDB';
 

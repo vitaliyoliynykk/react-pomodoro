@@ -1,4 +1,8 @@
-import { CONFIG_STORE_NAME, Sequence, SequenceDBEntryModel } from '@/models';
+import {
+  CONFIG_STORE_NAME,
+  Sequence,
+  SequenceDBEntryModel,
+} from '@/shared/models';
 
 import { initDB } from './db';
 

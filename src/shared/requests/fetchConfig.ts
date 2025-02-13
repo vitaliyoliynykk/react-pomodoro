@@ -1,7 +1,6 @@
 import { getPomodoroConfig } from '@/db/config-store';
-
-import { DEFAULT_SEQUENCE_CONFIG } from '../constants/sequence-config';
-import { Sequence } from '../models/sequence-model';
+import { DEFAULT_SEQUENCE_CONFIG } from '@/shared/constants/sequence-config';
+import { Sequence } from '@/shared/models';
 
 export const fetchSequenceConfig = async (
   configName: string
