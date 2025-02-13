@@ -8,6 +8,7 @@ export const HeadingContainer = styled.div`
   border-radius: 8px;
   margin-bottom: 24px;
   padding: 12px 0px;
+  text-align: center;
 `;
 
 export const Heading = styled.h1`
@@ -16,9 +17,8 @@ export const Heading = styled.h1`
   font-size: 32px;
 `;
 
-export const Container = styled.div`
+export const ClockContainer = styled.div`
   width: 250px;
-  height: 100%;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -37,4 +37,11 @@ export const ControlButton = styled(Button)`
   &:first-child {
     margin-right: 8px;
   }
+`;
+
+export const Container = styled.div`
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
 `;

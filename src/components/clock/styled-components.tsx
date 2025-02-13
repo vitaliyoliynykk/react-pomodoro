@@ -31,4 +31,5 @@ export const Time = styled.div`
   top: calc(50% - 24px);
   width: 100%;
   font-size: 32px;
+  text-align: center;
 `;

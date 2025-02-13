@@ -16,6 +16,7 @@ import {
 } from './pomodoro-slice';
 import {
   Buttons,
+  ClockContainer,
   Container,
   ControlButton,
   Heading,
@@ -120,40 +121,46 @@ function PomodoroPage() {
   if (status === 'complete') {
     return (
       <Container>
-        <HeadingContainer>
-          <Heading>{headings[sequenceConfig[currentCycle].type]}</Heading>
-          <div>Completed: {completedToday}</div>
-        </HeadingContainer>
+        <ClockContainer>
+          <HeadingContainer>
+            <Heading>{headings[sequenceConfig[currentCycle].type]}</Heading>
+            <div>Completed: {completedToday}</div>
+          </HeadingContainer>
 
-        <ClockComponent
-          currentTime={currentTime}
-          maxTime={sequenceConfig[currentCycle].duration}
-          color={colors[sequenceConfig[currentCycle].type]}
-        />
+          <ClockComponent
+            currentTime={currentTime}
+            maxTime={sequenceConfig[currentCycle].duration}
+            color={colors[sequenceConfig[currentCycle].type]}
+          />
 
-        <Buttons>
-          <ControlButton
-            variant="subtle"
-            colorPalette={'teal'}
-            onClick={() => {
-              handleStartStop(isClockRunning);
-            }}
-          >
-            {isClockRunning ? 'Stop' : 'Start'}
-          </ControlButton>
+          <Buttons>
+            <ControlButton
+              variant="subtle"
+              colorPalette={'teal'}
+              onClick={() => {
+                handleStartStop(isClockRunning);
+              }}
+            >
+              {isClockRunning ? 'Stop' : 'Start'}
+            </ControlButton>
 
-          <ControlButton
-            variant="solid"
-            disabled={!isClockRunning}
-            onClick={skipClock}
-          >
-            Skip
-          </ControlButton>
-        </Buttons>
+            <ControlButton
+              variant="solid"
+              disabled={!isClockRunning}
+              onClick={skipClock}
+            >
+              Skip
+            </ControlButton>
+          </Buttons>
+        </ClockContainer>
       </Container>
     );
   } else {
-    return <Spinner />;
+    return (
+      <Container>
+        <Spinner />;
+      </Container>
+    );
   }
 }
 
