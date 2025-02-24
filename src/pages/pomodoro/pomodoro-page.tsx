@@ -9,7 +9,7 @@ import { AppDispatch, RootState } from '@/store';
 
 import {
   clockTick,
-  initializeConfig,
+  getConfig,
   nextCycle,
   startClock,
   stopClock,
@@ -63,7 +63,7 @@ function PomodoroPage() {
   };
 
   useEffect(() => {
-    void dispatch(initializeConfig());
+    void dispatch(getConfig());
 
     return () => {
       if (intervalRef.current) {

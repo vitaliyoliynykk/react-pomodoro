@@ -25,12 +25,9 @@ const initialState: PomodoroState = {
   isClockRunning: false,
 };
 
-export const initializeConfig = createAsyncThunk(
-  'pomodoro/initConfig',
-  async () => {
-    return await fetchSequenceConfig('defaultConfig');
-  }
-);
+export const getConfig = createAsyncThunk('pomodoro/initConfig', async () => {
+  return await fetchSequenceConfig('defaultConfig');
+});
 
 const pomodoroSlice = createSlice({
   name: 'pomodoro',
@@ -56,18 +53,18 @@ const pomodoroSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(initializeConfig.pending, (state) => {
+      .addCase(getConfig.pending, (state) => {
         state.config.status = 'loading';
       })
       .addCase(
-        initializeConfig.fulfilled,
+        getConfig.fulfilled,
         (state, action: PayloadAction<Sequence>) => {
           state.config.status = 'complete';
           state.config.data = action.payload.slice();
           state.currentTime = action.payload[0].duration;
         }
       )
-      .addCase(initializeConfig.rejected, (state) => {
+      .addCase(getConfig.rejected, (state) => {
         state.config.status = 'error';
       });
   },
