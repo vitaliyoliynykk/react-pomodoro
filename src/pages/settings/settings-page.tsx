@@ -60,7 +60,8 @@ function SettingsPage() {
           <Field.Label>Duration (minutes)</Field.Label>
           <Input
             type="number"
-            {...register(`items.${String(index)}.duration`, {
+            // eslint-disable-next-line
+            {...register(`items.${index}.duration`, {
               required: 'Duration is required',
             })}
           />
@@ -69,7 +70,8 @@ function SettingsPage() {
         <NativeSelectRoot>
           <NativeSelectField
             placeholder="Select type"
-            {...register(`items.${String(index)}.type`, {
+            // eslint-disable-next-line
+            {...register(`items.${index}.type`, {
               required: 'Duration is required',
             })}
           >
