@@ -10,7 +10,8 @@
     "format": "prettier --write ./src",
     "lint": "eslint . --fix",
     "prepare": "husky",
-    "test": "pnpm format && pnpm lint"
+    "pre-commit": "pnpm format && pnpm lint",
+    "test": "vitest"
   },
   "dependencies": {
     "@chakra-ui/react": "^3.7.0",
@@ -30,6 +31,10 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.2.0",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^22.13.5",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
@@ -45,10 +50,12 @@
     "eslint-plugin-unused-imports": "^4.1.4",
     "globals": "^15.14.0",
     "husky": "^9.1.7",
+    "jsdom": "^26.0.0",
     "lint-staged": "^15.4.3",
     "prettier": "^3.4.2",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.22.0",
-    "vite": "^6.1.0"
+    "vite": "^6.1.0",
+    "vitest": "^3.0.8"
   }
 }
