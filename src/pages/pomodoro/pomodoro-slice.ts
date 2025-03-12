@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { Sequence } from '@/shared/models';
+import { Sequence, SequenceType } from '@/shared/models';
 import { fetchSequenceConfig } from '@/shared/requests/fetchConfig';
 
 interface PomodoroState {
@@ -20,7 +20,7 @@ const initialState: PomodoroState = {
     data: [],
   },
   currentCycle: 0,
-  currentTime: 0,
+  currentTime: 1500,
   completedToday: 0,
   isClockRunning: false,
 };
@@ -34,7 +34,9 @@ const pomodoroSlice = createSlice({
   initialState,
   reducers: {
     nextCycle: (state) => {
-      if (state.config.data[state.currentCycle].type === 'pomodoro') {
+      if (
+        state.config.data[state.currentCycle].type === SequenceType.POMODORO
+      ) {
         state.completedToday += 1;
       }
 

@@ -34,7 +34,7 @@ export const Buttons = styled.div`
 export const ControlButton = styled(Button)`
   width: 50%;
 
-  &:first-child {
+  &:first-of-type {
     margin-right: 8px;
   }
 `;

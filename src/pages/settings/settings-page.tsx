@@ -11,7 +11,7 @@ import { useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { SequenceItem } from '@/shared/models';
+import { SequenceItem, SequenceType } from '@/shared/models';
 import { AppDispatch, RootState } from '@/store';
 
 import { getConfig } from '../pomodoro/pomodoro-slice';
@@ -24,9 +24,9 @@ type Nullable<T> = {
 function SettingsPage() {
   const dispatch = useDispatch<AppDispatch>();
 
-  const sequenceConfig = useSelector(
-    (state: RootState) => state.pomodoro.config.data
-  );
+  const {
+    config: { data: sequenceConfig },
+  } = useSelector((state: RootState) => state.pomodoro);
 
   const { register, handleSubmit, control, reset } = useForm<{
     items: Nullable<SequenceItem>[];
@@ -75,9 +75,9 @@ function SettingsPage() {
               required: 'Duration is required',
             })}
           >
-            <option value="pomodoro">Pomodoro</option>
-            <option value="short_break">Short break</option>
-            <option value="long_break">Long break</option>
+            <option value={SequenceType.POMODORO}>Pomodoro</option>
+            <option value={SequenceType.SHORT_BREAK}>Short break</option>
+            <option value={SequenceType.LONG_BREAK}>Long break</option>
           </NativeSelectField>
         </NativeSelectRoot>
 
