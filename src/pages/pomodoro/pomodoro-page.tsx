@@ -55,15 +55,8 @@ function PomodoroPage() {
   }, [dispatch]);
 
   useEffect(() => {
-    let documentTitle = '';
-
-    if (sequenceConfig[currentCycle]?.type === SequenceType.POMODORO) {
-      documentTitle = 'Time to focus!';
-    } else {
-      documentTitle = 'Time for a break!';
-    }
-
-    document.title = `${formatTime(currentTime).toString()} - ${documentTitle}`;
+    handleUpdateDocumentTitle();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentCycle, currentTime, sequenceConfig]);
 
   useEffect(() => {
@@ -74,6 +67,18 @@ function PomodoroPage() {
       dispatch(nextCycle());
     }
   }, [currentTime, dispatch]);
+
+  const handleUpdateDocumentTitle = () => {
+    let documentTitle = '';
+
+    if (sequenceConfig[currentCycle]?.type === SequenceType.POMODORO) {
+      documentTitle = 'Time to focus!';
+    } else {
+      documentTitle = 'Time for a break!';
+    }
+
+    document.title = `${formatTime(currentTime).toString()} - ${documentTitle}`;
+  };
 
   const handleStartClock = () => {
     workerRef.current?.postMessage('start');
