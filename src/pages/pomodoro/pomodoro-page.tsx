@@ -6,7 +6,7 @@ import clickSound from '@/assets/sounds/click.mp3';
 import alarmSound from '@/assets/sounds/clock-alarm.mp3';
 import TimerWorker from '@/assets/workers/timerWorker.js?worker';
 import ClockComponent from '@/shared/components/clock/clock-component';
-import { SequenceType } from '@/shared/models';
+import { Sequence, SequenceType } from '@/shared/models';
 import { AppDispatch, RootState } from '@/store';
 import { formatTime } from '@/utils';
 
@@ -55,8 +55,7 @@ function PomodoroPage() {
   }, [dispatch]);
 
   useEffect(() => {
-    handleUpdateDocumentTitle();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    handleUpdateDocumentTitle(currentCycle, currentTime, sequenceConfig);
   }, [currentCycle, currentTime, sequenceConfig]);
 
   useEffect(() => {
@@ -68,7 +67,11 @@ function PomodoroPage() {
     }
   }, [currentTime, dispatch]);
 
-  const handleUpdateDocumentTitle = () => {
+  const handleUpdateDocumentTitle = (
+    currentCycle: number,
+    currentTime: number,
+    sequenceConfig: Sequence
+  ) => {
     let documentTitle = '';
 
     if (sequenceConfig[currentCycle]?.type === SequenceType.POMODORO) {
