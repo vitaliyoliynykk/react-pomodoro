@@ -14,6 +14,14 @@ const createTestStore = () => {
   });
 };
 
+vi.stubGlobal(
+  'Worker',
+  class {
+    postMessage = vi.fn();
+    terminate = vi.fn();
+  }
+);
+
 // TODO: Add mocks for indexDB
 describe('PomodoroPage', () => {
   it('WHEN user clicks start button THEN clock should be started', async () => {
