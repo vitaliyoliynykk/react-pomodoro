@@ -1,20 +1,26 @@
 import { Box, Button, Heading, Input, Text, VStack } from '@chakra-ui/react';
-import { FC, FormEvent, useState } from 'react';
+import { FC } from 'react';
+import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router';
 
 const RegisterPage: FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const { register, handleSubmit, reset } = useForm<{
+    email: string;
+    password: string;
+  }>({
+    defaultValues: { email: '', password: '' },
+  });
 
   const navigate = useNavigate();
 
-  const handleSubmit = (event: FormEvent) => {
-    event.preventDefault();
+  const onSubmit = handleSubmit((data) => {
+    const { email, password } = data;
 
     localStorage.setItem('user', JSON.stringify({ email, password }));
 
     void navigate('/sign-in');
-  };
+    reset();
+  });
 
   return (
     <Box
@@ -22,11 +28,12 @@ const RegisterPage: FC = () => {
       alignItems="center"
       justifyContent="center"
       height="100vh"
-      bg="gray.100"
+      bg="rgb(36 36 36)"
     >
       <Box
         bg="white"
         p={6}
+        m="0 1.5rem"
         borderRadius="lg"
         boxShadow="lg"
         width="400px"
@@ -36,35 +43,36 @@ const RegisterPage: FC = () => {
           Register
         </Heading>
 
-        <form onSubmit={handleSubmit}>
-          <VStack>
-            <Input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(event) => {
-                setEmail(event.target.value);
-              }}
-              color="black"
-              required
-            />
+        <VStack>
+          <Input
+            type="email"
+            placeholder="Email"
+            color="black"
+            {...register('email', {
+              required: 'Email is required',
+            })}
+          />
 
-            <Input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(event) => {
-                setPassword(event.target.value);
-              }}
-              color="black"
-              required
-            />
+          <Input
+            type="password"
+            placeholder="Password"
+            color="black"
+            {...register('password', {
+              required: 'Password is required',
+            })}
+          />
 
-            <Button colorScheme="blue" width="100%" type="submit">
-              Register
-            </Button>
-          </VStack>
-        </form>
+          <Button
+            colorScheme="blue"
+            width="100%"
+            type="submit"
+            onClick={() => {
+              void onSubmit();
+            }}
+          >
+            Register
+          </Button>
+        </VStack>
 
         <Text mt={4} color="blue.500">
           <Link to="/sign-in">Already have an account? Sign In</Link>
