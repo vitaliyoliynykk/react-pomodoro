@@ -25,9 +25,9 @@ const ClockComponent: FC<ClockComponentPropsType> = ({
 
   return (
     <Container>
-      <ClockBackground color={color} />
-      <Clock circle={circleFill} color={color} />
-      <Time> {formattedTime}</Time>
+      <ClockBackground data-testid="clock-background" color={color} />
+      <Clock data-testid="clock" circle={circleFill} color={color} />
+      <Time data-testid="formatted-time">{formattedTime}</Time>
     </Container>
   );
 };
