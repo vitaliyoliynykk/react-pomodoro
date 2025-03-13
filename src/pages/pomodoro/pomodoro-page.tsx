@@ -4,11 +4,11 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import clickSound from '@/assets/sounds/click.mp3';
 import alarmSound from '@/assets/sounds/clock-alarm.mp3';
-import TimerWorker from '@/assets/workers/timerWorker.js?worker';
 import ClockComponent from '@/shared/components/clock/clock-component';
 import { Sequence, SequenceType } from '@/shared/models';
 import { AppDispatch, RootState } from '@/store';
 import { formatTime } from '@/utils';
+import TimerWorker from '@/workers/timerWorker.js?worker';
 
 import { COLORS, HEADINGS } from './constants';
 import {
