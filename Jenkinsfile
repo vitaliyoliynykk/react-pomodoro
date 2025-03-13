@@ -18,7 +18,7 @@ pipeline {
             }
         }
 
-        stage('Build Project') {
+        stage('Test and build Project') {
             steps {
                 sh 'pnpm run build'
             }
