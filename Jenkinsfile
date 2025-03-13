@@ -14,7 +14,6 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'nvm use'
                 sh 'pnpm install'
             }
         }
