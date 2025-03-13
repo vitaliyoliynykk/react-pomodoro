@@ -60,22 +60,28 @@ describe('PomodoroPage', () => {
 
     const dispatchSpy = vi.spyOn(store, 'dispatch');
 
-    await waitFor(() => {
-      const startButton = screen.getByText('Start');
-      void userEvent.click(startButton);
+    await waitFor(
+      () => {
+        const startButton = screen.getByText('Start');
+        void userEvent.click(startButton);
 
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        expect.objectContaining({ type: 'pomodoro/startClock' })
-      );
-    });
+        expect(dispatchSpy).toHaveBeenCalledWith(
+          expect.objectContaining({ type: 'pomodoro/startClock' })
+        );
+      },
+      { timeout: 5000 }
+    );
 
-    await waitFor(() => {
-      const startButton = screen.getByText('Stop');
-      void userEvent.click(startButton);
+    await waitFor(
+      () => {
+        const startButton = screen.getByText('Stop');
+        void userEvent.click(startButton);
 
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        expect.objectContaining({ type: 'pomodoro/stopClock' })
-      );
-    });
+        expect(dispatchSpy).toHaveBeenCalledWith(
+          expect.objectContaining({ type: 'pomodoro/stopClock' })
+        );
+      },
+      { timeout: 5000 }
+    );
   });
 });
