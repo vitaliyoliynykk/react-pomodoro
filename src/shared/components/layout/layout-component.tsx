@@ -6,6 +6,7 @@ import { Outlet } from 'react-router';
 import {
   Content,
   LayoutContainer,
+  NavigationMenu,
   Sidebar,
   StyledNavLink,
 } from './styled-components';
@@ -32,9 +33,10 @@ const Layout = () => {
     <LayoutContainer>
       <Sidebar>
         <nav>
-          <ul>{getNavigationMenu()}</ul>
+          <NavigationMenu>{getNavigationMenu()}</NavigationMenu>
         </nav>
       </Sidebar>
+
       <Content>
         <Outlet />
       </Content>
