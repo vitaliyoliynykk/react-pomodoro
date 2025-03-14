@@ -65,10 +65,6 @@ const pomodoroSlice = createSlice({
         (state, action: PayloadAction<Sequence>) => {
           state.config.status = 'complete';
           state.config.data = action.payload.slice();
-
-          if (state.currentTime === initialCurrentTime) {
-            state.currentTime = action.payload[0].duration;
-          }
         }
       )
       .addCase(getConfig.rejected, (state) => {

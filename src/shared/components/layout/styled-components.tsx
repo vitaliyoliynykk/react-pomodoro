@@ -33,15 +33,6 @@ export const StyledNavLink = styled(NavLink)`
   }
 `;
 
-// export const Content = styled.main`
-//   flex: 1;
-//   width: 100%;
-//   height: auto;
-
-//   @media (max-width: 768px) {
-//     height: calc(100vh - 74px);
-//   }
-// `;
 export const Content = styled.main`
   width: 100%;
 
