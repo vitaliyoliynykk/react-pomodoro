@@ -7,6 +7,10 @@ export const Container = styled.div`
   height: 100%;
   padding: 24px;
   overflow-y: auto;
+
+  @media (max-width: 768px) {
+    padding-top: 74px;
+  }
 `;
 
 export const FormItem = styled.div`
