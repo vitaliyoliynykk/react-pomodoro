@@ -7,13 +7,15 @@ export const LayoutContainer = styled.div`
   height: 100%;
 
   @media (max-width: 768px) {
+    width: 100%;
+    position: fixed;
     flex-direction: column-reverse;
   }
 `;
 
 export const Sidebar = styled.aside`
   background-color: rgba(255, 255, 255, 0.2);
-  padding: 8px 12px;
+  padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
 `;
 
 export const StyledNavLink = styled(NavLink)`
@@ -31,6 +33,15 @@ export const StyledNavLink = styled(NavLink)`
   }
 `;
 
+// export const Content = styled.main`
+//   flex: 1;
+//   width: 100%;
+//   height: auto;
+
+//   @media (max-width: 768px) {
+//     height: calc(100vh - 74px);
+//   }
+// `;
 export const Content = styled.main`
   width: 100%;
 

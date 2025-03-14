@@ -3,6 +3,8 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Sequence, SequenceType } from '@/shared/models';
 import { fetchSequenceConfig } from '@/shared/requests/fetchConfig';
 
+const initialCurrentTime = 1500;
+
 interface PomodoroState {
   config: {
     status: 'loading' | 'complete' | 'error' | 'empty';
@@ -20,7 +22,7 @@ const initialState: PomodoroState = {
     data: [],
   },
   currentCycle: 0,
-  currentTime: 1500,
+  currentTime: initialCurrentTime,
   completedToday: 0,
   isClockRunning: false,
 };
@@ -63,7 +65,10 @@ const pomodoroSlice = createSlice({
         (state, action: PayloadAction<Sequence>) => {
           state.config.status = 'complete';
           state.config.data = action.payload.slice();
-          state.currentTime = action.payload[0].duration;
+
+          if (state.currentTime === initialCurrentTime) {
+            state.currentTime = action.payload[0].duration;
+          }
         }
       )
       .addCase(getConfig.rejected, (state) => {
