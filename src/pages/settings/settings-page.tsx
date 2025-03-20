@@ -12,9 +12,9 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { SequenceItem, SequenceType } from '@/shared/models';
-import { AppDispatch, RootState } from '@/store';
+import { AppDispatch, RootState } from '@/store/store';
 
-import { getConfig } from '../pomodoro/pomodoro-slice';
+import { getConfig } from '../../store/slices/pomodoro-slice';
 import { Buttons, Container, FormItem } from './styled-components';
 
 type Nullable<T> = {

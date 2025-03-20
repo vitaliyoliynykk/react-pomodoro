@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import { pomodoroReducer } from './pages/pomodoro/pomodoro-slice';
+import { pomodoroReducer } from './slices/pomodoro-slice';
 
 export const store = configureStore({
   reducer: {

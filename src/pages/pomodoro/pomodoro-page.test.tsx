@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import { describe, expect, it, vi } from 'vitest';
 
 import PomodoroPage from './pomodoro-page';
-import { pomodoroReducer } from './pomodoro-slice';
+import { pomodoroReducer } from '../../store/slices/pomodoro-slice';
 
 const createTestStore = () => {
   return configureStore({

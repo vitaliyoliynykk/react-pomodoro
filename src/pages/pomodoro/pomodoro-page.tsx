@@ -6,18 +6,18 @@ import clickSound from '@/assets/sounds/click.mp3';
 import alarmSound from '@/assets/sounds/clock-alarm.mp3';
 import ClockComponent from '@/shared/components/clock/clock-component';
 import { Sequence, SequenceType } from '@/shared/models';
-import { AppDispatch, RootState } from '@/store';
-import { formatTime } from '@/utils';
-import TimerWorker from '@/workers/timerWorker.js?worker';
-
-import { COLORS, HEADINGS } from './constants';
 import {
   clockTick,
   getConfig,
   nextCycle,
   startClock,
   stopClock,
-} from './pomodoro-slice';
+} from '@/store/slices/pomodoro-slice';
+import { AppDispatch, RootState } from '@/store/store';
+import { formatTime } from '@/utils';
+import TimerWorker from '@/workers/timerWorker.js?worker';
+
+import { COLORS, HEADINGS } from './constants';
 import {
   Buttons,
   ClockContainer,
