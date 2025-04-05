@@ -2,7 +2,10 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { SignInResponseModel } from '@/shared/models/responses/sign-in-response-model';
 import { UserResponseModel } from '@/shared/models/responses/user-response-model';
-import { signInRequest } from '@/shared/requests/auth/signInRequest';
+import {
+  getUserRequest,
+  signInRequest,
+} from '@/shared/requests/auth/signInRequest';
 
 interface UserState {
   status: 'loading' | 'complete' | 'error' | 'empty';
@@ -18,6 +21,8 @@ export const signIn = createAsyncThunk<
   SignInResponseModel,
   { email: string; password: string }
 >('user/signIn', ({ email, password }) => signInRequest(email, password));
+
+export const getUser = createAsyncThunk('user/get', () => getUserRequest());
 
 const userSlice = createSlice({
   name: 'user',
@@ -36,6 +41,21 @@ const userSlice = createSlice({
         }
       )
       .addCase(signIn.rejected, (state) => {
+        state.status = 'error';
+      });
+
+    builder
+      .addCase(getUser.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(
+        getUser.fulfilled,
+        (state, action: PayloadAction<UserResponseModel>) => {
+          state.status = 'complete';
+          state.user = action.payload;
+        }
+      )
+      .addCase(getUser.rejected, (state) => {
         state.status = 'error';
       });
   },
