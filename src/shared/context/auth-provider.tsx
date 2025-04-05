@@ -22,6 +22,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       } catch {
         localStorage.removeItem(ACCESS_TOKEN_KEY);
       }
+    } else {
+      _setUser(null);
     }
   };
 

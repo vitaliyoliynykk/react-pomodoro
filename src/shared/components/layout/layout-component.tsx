@@ -4,11 +4,11 @@ import { FaHome } from 'react-icons/fa';
 import { IoMdLogOut } from 'react-icons/io';
 import { IoSettingsSharp } from 'react-icons/io5';
 import { useDispatch, useSelector } from 'react-redux';
-import { Outlet, useNavigate } from 'react-router';
+import { Outlet } from 'react-router';
 
 import { ACCESS_TOKEN_KEY } from '@/shared/constants/tokens';
 import { useAuth } from '@/shared/context/auth-context';
-import { getUser } from '@/store/slices/user-slice';
+import { getUser, logOut } from '@/store/slices/user-slice';
 import { AppDispatch, RootState } from '@/store/store';
 
 import {
@@ -26,16 +26,15 @@ const _navigation = [
 ];
 
 const Layout = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const { user: authUser } = useAuth();
-  const { user } = useSelector((state: RootState) => state.user);
+  const { user: authUser, setUser } = useAuth();
+  const { user, status } = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
-    if (authUser && !user) {
+    if (authUser && !user && status !== 'loading') {
       void dispatch(getUser());
     }
-  }, [authUser, dispatch, user]);
+  }, [authUser, dispatch, user, status]);
 
   const navigation = useMemo(() => {
     if (!user) {
@@ -46,9 +45,15 @@ const Layout = () => {
   }, [user]);
 
   const handleLogOut = () => {
-    localStorage.removeItem(ACCESS_TOKEN_KEY);
-
-    void navigate('/sign-in');
+    try {
+      if (setUser) {
+        setUser(null);
+      }
+      localStorage.removeItem(ACCESS_TOKEN_KEY);
+      void dispatch(logOut());
+    } catch {
+      console.log('Error loggin out');
+    }
   };
 
   const getNavigationMenu = () => {
