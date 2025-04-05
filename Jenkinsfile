@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         FIREBASE_TOKEN = credentials('FIREBASE_TOKEN')
+        VITE_API_URL = 'https://flow-track-api.duckdns.org'
     }
 
     stages {
