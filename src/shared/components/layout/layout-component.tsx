@@ -1,7 +1,7 @@
 import { Icon } from '@chakra-ui/react';
 import { useEffect, useMemo } from 'react';
 import { FaHome } from 'react-icons/fa';
-import { IoMdLogOut } from 'react-icons/io';
+import { IoMdLogIn, IoMdLogOut } from 'react-icons/io';
 import { IoSettingsSharp } from 'react-icons/io5';
 import { useDispatch, useSelector } from 'react-redux';
 import { Outlet } from 'react-router';
@@ -23,6 +23,7 @@ const _navigation = [
   { link: '/', icon: <FaHome /> },
   { link: '/settings', icon: <IoSettingsSharp />, isProtected: true },
   { link: '/sign-out', icon: <IoMdLogOut />, isProtected: true },
+  { link: '/sign-in', icon: <IoMdLogIn />, isHiddenForAuthorized: true },
 ];
 
 const Layout = () => {
@@ -41,7 +42,7 @@ const Layout = () => {
       return _navigation.filter((item) => !item.isProtected);
     }
 
-    return _navigation;
+    return _navigation.filter((item) => !item.isHiddenForAuthorized);
   }, [user]);
 
   const handleLogOut = () => {
