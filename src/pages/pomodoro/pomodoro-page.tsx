@@ -14,7 +14,7 @@ import {
   stopClock,
 } from '@/store/slices/pomodoro-slice';
 import { AppDispatch, RootState } from '@/store/store';
-import { formatTime } from '@/utils';
+import { formatTime } from '@/utils/time';
 import TimerWorker from '@/workers/timerWorker.js?worker';
 
 import { COLORS, HEADINGS } from './constants';

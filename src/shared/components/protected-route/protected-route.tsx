@@ -1,12 +1,15 @@
 import { FC } from 'react';
 import { Navigate, Outlet } from 'react-router';
 
-import { useIsAuthenticated } from '@/shared/hooks/useIsAuthenticated';
+import { useAuth } from '@/shared/context/auth-context';
 
 const ProtectedRoute: FC = () => {
-  const isAuthenticated = useIsAuthenticated();
+  const auth = useAuth();
+  // const isAuthenticated = useIsAuthenticated();
 
-  return isAuthenticated ? <Outlet /> : <Navigate to="/sign-in" replace />;
+  console.log(auth.user);
+
+  return auth.user ? <Outlet /> : <Navigate to="/sign-in" replace />;
 };
 
 export default ProtectedRoute;

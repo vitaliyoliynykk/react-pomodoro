@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 
-import { formatTime } from '@/utils';
+import { formatTime } from '@/utils/time';
 
 import { ClockComponentPropsType } from './clock-component-props.type';
 import { Clock, ClockBackground, Container, Time } from './styled-components';

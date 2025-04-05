@@ -11,14 +11,20 @@ import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router';
 
+import { ACCESS_TOKEN_KEY } from '@/shared/constants/tokens';
+import { useAuth } from '@/shared/context/auth-context';
+import { SignInResponseModel } from '@/shared/models/responses/sign-in-response-model';
+import api from '@/utils/api';
+
 const SignInPage: FC = () => {
   const navigate = useNavigate();
+  const { setUserToState } = useAuth();
+
   const {
     register,
     handleSubmit,
     reset,
-    setError,
-    formState: { errors },
+    formState: { errors, isSubmitting, isValid },
   } = useForm<{
     email: string;
     password: string;
@@ -26,20 +32,22 @@ const SignInPage: FC = () => {
     defaultValues: { email: '', password: '' },
   });
 
-  const onSubmit = handleSubmit(() => {
-    const user = localStorage.getItem('user');
-
-    if (!user) {
-      setError('root', {
-        type: 'manual',
-        message: 'There is no user found with this email!',
+  const onSubmit = handleSubmit(async ({ email, password }) => {
+    try {
+      const response = await api.post<SignInResponseModel>('auth/login', {
+        email,
+        password,
       });
 
-      return;
-    }
+      if (response.data.accessToken && setUserToState) {
+        localStorage.setItem(ACCESS_TOKEN_KEY, response.data.accessToken);
+        setUserToState(response.data.accessToken);
 
-    void navigate('/');
-    reset();
+        void navigate('/');
+      }
+    } catch {
+      reset();
+    }
   });
 
   return (
@@ -89,6 +97,8 @@ const SignInPage: FC = () => {
             onClick={() => {
               void onSubmit();
             }}
+            loading={isSubmitting}
+            disabled={isSubmitting || !isValid}
           >
             Sign In
           </Button>
