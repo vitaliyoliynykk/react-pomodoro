@@ -9,16 +9,18 @@ import {
 } from '@chakra-ui/react';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router';
 
 import { ACCESS_TOKEN_KEY } from '@/shared/constants/tokens';
 import { useAuth } from '@/shared/context/auth-context';
-import { SignInResponseModel } from '@/shared/models/responses/sign-in-response-model';
-import api from '@/utils/api';
+import { signIn } from '@/store/slices/user-slice';
+import { AppDispatch } from '@/store/store';
 
 const SignInPage: FC = () => {
   const navigate = useNavigate();
-  const { setUserToState } = useAuth();
+  const { setUser } = useAuth();
+  const dispatch = useDispatch<AppDispatch>();
 
   const {
     register,
@@ -32,22 +34,20 @@ const SignInPage: FC = () => {
     defaultValues: { email: '', password: '' },
   });
 
-  const onSubmit = handleSubmit(async ({ email, password }) => {
-    try {
-      const response = await api.post<SignInResponseModel>('auth/login', {
-        email,
-        password,
+  const onSubmit = handleSubmit(({ email, password }) => {
+    dispatch(signIn({ email, password }))
+      .unwrap()
+      .then(({ accessToken }) => {
+        if (accessToken && setUser) {
+          localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
+          setUser(accessToken);
+
+          void navigate('/');
+        }
+      })
+      .catch(() => {
+        reset();
       });
-
-      if (response.data.accessToken && setUserToState) {
-        localStorage.setItem(ACCESS_TOKEN_KEY, response.data.accessToken);
-        setUserToState(response.data.accessToken);
-
-        void navigate('/');
-      }
-    } catch {
-      reset();
-    }
   });
 
   return (

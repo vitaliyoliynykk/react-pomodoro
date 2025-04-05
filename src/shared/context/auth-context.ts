@@ -4,7 +4,7 @@ import { JwtUserModel } from '../models/jwt-user-model';
 
 export const AuthContext = createContext<{
   user: JwtUserModel | null;
-  setUserToState?: (token: string) => void;
+  setUser?: (token: string) => void;
 }>({ user: null });
 
 export const useAuth = () => useContext(AuthContext);
