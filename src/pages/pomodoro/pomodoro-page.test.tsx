@@ -5,8 +5,8 @@ import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { describe, expect, it, vi } from 'vitest';
 
+import { pomodoroReducer } from '../../store/slices/pomodoro-slice';
 import PomodoroPage from './pomodoro-page';
-import { pomodoroReducer } from './pomodoro-slice';
 
 const createTestStore = () => {
   return configureStore({

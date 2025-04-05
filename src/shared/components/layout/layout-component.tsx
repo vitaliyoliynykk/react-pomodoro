@@ -1,8 +1,15 @@
 import { Icon } from '@chakra-ui/react';
+import { useEffect, useMemo } from 'react';
 import { FaHome } from 'react-icons/fa';
-import { IoMdLogOut } from 'react-icons/io';
+import { IoMdLogIn, IoMdLogOut } from 'react-icons/io';
 import { IoSettingsSharp } from 'react-icons/io5';
-import { Outlet, useNavigate } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
+import { Outlet } from 'react-router';
+
+import { ACCESS_TOKEN_KEY } from '@/shared/constants/tokens';
+import { useAuth } from '@/shared/context/auth-context';
+import { getUser, logOut } from '@/store/slices/user-slice';
+import { AppDispatch, RootState } from '@/store/store';
 
 import {
   Content,
@@ -12,19 +19,42 @@ import {
   StyledNavLink,
 } from './styled-components';
 
-const Layout = () => {
-  const navigate = useNavigate();
+const _navigation = [
+  { link: '/', icon: <FaHome /> },
+  { link: '/settings', icon: <IoSettingsSharp />, isProtected: true },
+  { link: '/sign-out', icon: <IoMdLogOut />, isProtected: true },
+  { link: '/sign-in', icon: <IoMdLogIn />, isHiddenForAuthorized: true },
+];
 
-  const navigation = [
-    { link: '/', icon: <FaHome /> },
-    { link: '/settings', icon: <IoSettingsSharp /> },
-    { link: '/sign-out', icon: <IoMdLogOut /> },
-  ];
+const Layout = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { user: authUser, setUser } = useAuth();
+  const { user, status } = useSelector((state: RootState) => state.user);
+
+  useEffect(() => {
+    if (authUser && !user && status !== 'loading') {
+      void dispatch(getUser());
+    }
+  }, [authUser, dispatch, user, status]);
+
+  const navigation = useMemo(() => {
+    if (!user) {
+      return _navigation.filter((item) => !item.isProtected);
+    }
+
+    return _navigation.filter((item) => !item.isHiddenForAuthorized);
+  }, [user]);
 
   const handleLogOut = () => {
-    localStorage.removeItem('user');
-
-    void navigate('/sign-in');
+    try {
+      if (setUser) {
+        setUser(null);
+      }
+      localStorage.removeItem(ACCESS_TOKEN_KEY);
+      void dispatch(logOut());
+    } catch {
+      console.log('Error loggin out');
+    }
   };
 
   const getNavigationMenu = () => {

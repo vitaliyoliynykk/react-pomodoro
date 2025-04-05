@@ -9,16 +9,24 @@ import {
 } from '@chakra-ui/react';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router';
+
+import { ACCESS_TOKEN_KEY } from '@/shared/constants/tokens';
+import { useAuth } from '@/shared/context/auth-context';
+import { signIn } from '@/store/slices/user-slice';
+import { AppDispatch } from '@/store/store';
 
 const SignInPage: FC = () => {
   const navigate = useNavigate();
+  const { setUser } = useAuth();
+  const dispatch = useDispatch<AppDispatch>();
+
   const {
     register,
     handleSubmit,
     reset,
-    setError,
-    formState: { errors },
+    formState: { errors, isSubmitting, isValid },
   } = useForm<{
     email: string;
     password: string;
@@ -26,20 +34,20 @@ const SignInPage: FC = () => {
     defaultValues: { email: '', password: '' },
   });
 
-  const onSubmit = handleSubmit(() => {
-    const user = localStorage.getItem('user');
+  const onSubmit = handleSubmit(({ email, password }) => {
+    dispatch(signIn({ email, password }))
+      .unwrap()
+      .then(({ accessToken }) => {
+        if (accessToken && setUser) {
+          localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
+          setUser(accessToken);
 
-    if (!user) {
-      setError('root', {
-        type: 'manual',
-        message: 'There is no user found with this email!',
+          void navigate('/');
+        }
+      })
+      .catch(() => {
+        reset();
       });
-
-      return;
-    }
-
-    void navigate('/');
-    reset();
   });
 
   return (
@@ -89,6 +97,8 @@ const SignInPage: FC = () => {
             onClick={() => {
               void onSubmit();
             }}
+            loading={isSubmitting}
+            disabled={isSubmitting || !isValid}
           >
             Sign In
           </Button>
