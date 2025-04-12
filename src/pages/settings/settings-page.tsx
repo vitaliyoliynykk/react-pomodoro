@@ -5,6 +5,7 @@ import {
   Input,
   NativeSelectField,
   NativeSelectRoot,
+  Spinner,
   Stack,
 } from '@chakra-ui/react';
 import { useEffect } from 'react';
@@ -16,6 +17,7 @@ import { getConfig } from '@/store/slices/pomodoro-slice';
 import { AppDispatch, RootState } from '@/store/store';
 
 import { Buttons, Container, FormItem } from './styled-components';
+import { getSettings } from '@/store/slices/settings-slice';
 
 type Nullable<T> = {
   [K in keyof T]: T[K] | null;
@@ -24,9 +26,10 @@ type Nullable<T> = {
 function SettingsPage() {
   const dispatch = useDispatch<AppDispatch>();
 
-  const sequenceConfig = useSelector(
-    (state: RootState) => state.settings.settings.pomodoroConfiguratin
+  const { pomodoroConfiguratin } = useSelector(
+    (state: RootState) => state.settings.settings
   );
+  const status = useSelector((state: RootState) => state.settings.status);
 
   const { register, handleSubmit, control, reset } = useForm<{
     items: Nullable<SequenceItem>[];
@@ -37,17 +40,17 @@ function SettingsPage() {
   const { fields, append, remove } = useFieldArray({ control, name: 'items' });
 
   useEffect(() => {
-    void dispatch(getConfig());
+    void dispatch(getSettings());
   }, [dispatch]);
 
   useEffect(() => {
     reset({
-      items: sequenceConfig.map(({ duration, type }) => ({
+      items: pomodoroConfiguratin.map(({ duration, type }) => ({
         duration: duration / 60,
         type,
       })),
     });
-  }, [sequenceConfig, reset]);
+  }, [pomodoroConfiguratin, reset]);
 
   const onSubmit = handleSubmit((data) => {
     console.log(data);
@@ -91,6 +94,10 @@ function SettingsPage() {
         </Button>
       </FormItem>
     ));
+
+  if (status == 'loading') {
+    return <Spinner />;
+  }
 
   return (
     <Container>
