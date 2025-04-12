@@ -13,7 +13,7 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { SequenceItem, SequenceType } from '@/shared/models';
-import { getSettings } from '@/store/slices/settings-slice';
+import { getSettings, updateSettings } from '@/store/slices/settings-slice';
 import { AppDispatch, RootState } from '@/store/store';
 
 import { Buttons, Container, FormItem } from './styled-components';
@@ -25,15 +25,16 @@ type Nullable<T> = {
 function SettingsPage() {
   const dispatch = useDispatch<AppDispatch>();
 
-  const { pomodoroConfiguratin } = useSelector(
+  const { pomodoroConfiguratin, pushNotificationEnabled } = useSelector(
     (state: RootState) => state.settings.settings
   );
   const status = useSelector((state: RootState) => state.settings.status);
 
   const { register, handleSubmit, control, reset } = useForm<{
     items: Nullable<SequenceItem>[];
+    pushNotificationEnabled: Nullable<boolean>;
   }>({
-    defaultValues: { items: [] },
+    defaultValues: { items: [], pushNotificationEnabled: true },
   });
 
   const { fields, append, remove } = useFieldArray({ control, name: 'items' });
@@ -48,11 +49,21 @@ function SettingsPage() {
         duration: duration / 60,
         type,
       })),
+      pushNotificationEnabled,
     });
-  }, [pomodoroConfiguratin, reset]);
+  }, [pomodoroConfiguratin, pushNotificationEnabled, reset]);
 
   const onSubmit = handleSubmit((data) => {
-    console.log(data);
+    const sequence = data.items.map<SequenceItem>((item) => ({
+      type: item.type ?? SequenceType.POMODORO,
+      duration: Number(item.duration) * 60,
+    }));
+    void dispatch(
+      updateSettings({
+        pomodoroConfiguration: sequence,
+        pushNotificationsEnabled: data.pushNotificationEnabled,
+      })
+    );
   });
 
   const getFields = () =>

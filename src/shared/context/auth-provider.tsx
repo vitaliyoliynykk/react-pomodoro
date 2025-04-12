@@ -17,7 +17,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const now = Date.now() / 1000;
         if (decoded.exp > now) {
           _setUser(decoded);
-          console.log('user has been set');
         } else {
           localStorage.removeItem(ACCESS_TOKEN_KEY);
         }
