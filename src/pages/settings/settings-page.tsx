@@ -24,9 +24,9 @@ type Nullable<T> = {
 function SettingsPage() {
   const dispatch = useDispatch<AppDispatch>();
 
-  const {
-    config: { data: sequenceConfig },
-  } = useSelector((state: RootState) => state.pomodoro);
+  const sequenceConfig = useSelector(
+    (state: RootState) => state.settings.settings.pomodoroConfiguratin
+  );
 
   const { register, handleSubmit, control, reset } = useForm<{
     items: Nullable<SequenceItem>[];
