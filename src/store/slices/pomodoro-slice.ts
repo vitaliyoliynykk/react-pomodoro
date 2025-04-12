@@ -1,15 +1,15 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { Sequence, SequenceType } from '@/shared/models';
-import { fetchSequenceConfig } from '@/shared/requests/fetchConfig';
+import { SettinsResponseModel } from '@/shared/models/responses/settings-response-model';
+
+import { RootState } from '../store';
+import { getSettings } from './settings-slice';
 
 const initialCurrentTime = 1500;
 
 interface PomodoroState {
-  config: {
-    status: 'loading' | 'complete' | 'error' | 'empty';
-    data: Sequence;
-  };
+  pomodoroConfig: Sequence;
   currentCycle: number;
   currentTime: number;
   completedToday: number;
@@ -17,18 +17,17 @@ interface PomodoroState {
 }
 
 const initialState: PomodoroState = {
-  config: {
-    status: 'empty',
-    data: [],
-  },
+  pomodoroConfig: [],
   currentCycle: 0,
   currentTime: initialCurrentTime,
   completedToday: 0,
   isClockRunning: false,
 };
 
-export const getConfig = createAsyncThunk('pomodoro/initConfig', async () => {
-  return await fetchSequenceConfig('defaultConfig');
+export const getConfig = createAsyncThunk('pomodoro/initConfig', (_, api) => {
+  const state = api.getState() as RootState;
+
+  return state.settings.settings.pomodoroConfiguratin;
 });
 
 const pomodoroSlice = createSlice({
@@ -37,13 +36,14 @@ const pomodoroSlice = createSlice({
   reducers: {
     nextCycle: (state) => {
       if (
-        state.config.data[state.currentCycle].type === SequenceType.POMODORO
+        state.pomodoroConfig[state.currentCycle].type === SequenceType.POMODORO
       ) {
         state.completedToday += 1;
       }
 
-      state.currentCycle = (state.currentCycle + 1) % state.config.data.length;
-      state.currentTime = state.config.data[state.currentCycle].duration;
+      state.currentCycle =
+        (state.currentCycle + 1) % state.pomodoroConfig.length;
+      state.currentTime = state.pomodoroConfig[state.currentCycle].duration;
     },
     clockTick: (state) => {
       state.currentTime -= 1;
@@ -56,21 +56,13 @@ const pomodoroSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder
-      .addCase(getConfig.pending, (state) => {
-        state.config.status = 'loading';
-      })
-      .addCase(
-        getConfig.fulfilled,
-        (state, action: PayloadAction<Sequence>) => {
-          state.config.status = 'complete';
-          state.config.data = action.payload.slice();
-          // state.currentTime = action.payload[0].duration;
-        }
-      )
-      .addCase(getConfig.rejected, (state) => {
-        state.config.status = 'error';
-      });
+    builder.addCase(
+      getSettings.fulfilled,
+      (state, action: PayloadAction<SettinsResponseModel>) => {
+        state.pomodoroConfig = action.payload.pomodoroConfiguration;
+        state.currentTime = state.pomodoroConfig[state.currentCycle].duration;
+      }
+    );
   },
 });
 

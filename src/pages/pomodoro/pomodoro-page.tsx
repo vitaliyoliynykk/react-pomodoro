@@ -8,11 +8,11 @@ import ClockComponent from '@/shared/components/clock/clock-component';
 import { Sequence, SequenceType } from '@/shared/models';
 import {
   clockTick,
-  getConfig,
   nextCycle,
   startClock,
   stopClock,
 } from '@/store/slices/pomodoro-slice';
+import { getSettings } from '@/store/slices/settings-slice';
 import { AppDispatch, RootState } from '@/store/store';
 import { formatTime } from '@/utils/time';
 import TimerWorker from '@/workers/timerWorker.js?worker';
@@ -34,16 +34,15 @@ function PomodoroPage() {
 
   const dispatch = useDispatch<AppDispatch>();
 
+  const { currentCycle, currentTime, completedToday, isClockRunning } =
+    useSelector((state: RootState) => state.pomodoro);
   const {
-    config: { data: sequenceConfig, status },
-    currentCycle,
-    currentTime,
-    completedToday,
-    isClockRunning,
-  } = useSelector((state: RootState) => state.pomodoro);
+    status,
+    settings: { pomodoroConfiguratin },
+  } = useSelector((state: RootState) => state.settings);
 
   useEffect(() => {
-    void dispatch(getConfig());
+    void dispatch(getSettings());
 
     workerRef.current = new TimerWorker();
 
@@ -55,8 +54,8 @@ function PomodoroPage() {
   }, [dispatch]);
 
   useEffect(() => {
-    handleUpdateDocumentTitle(currentCycle, currentTime, sequenceConfig);
-  }, [currentCycle, currentTime, sequenceConfig]);
+    handleUpdateDocumentTitle(currentCycle, currentTime, pomodoroConfiguratin);
+  }, [currentCycle, currentTime, pomodoroConfiguratin]);
 
   useEffect(() => {
     if (currentTime === 0) {
@@ -120,14 +119,16 @@ function PomodoroPage() {
       <Container>
         <ClockContainer>
           <HeadingContainer>
-            <Heading>{HEADINGS[sequenceConfig[currentCycle].type]}</Heading>
+            <Heading>
+              {HEADINGS[pomodoroConfiguratin[currentCycle].type]}
+            </Heading>
             <div>Completed: {completedToday}</div>
           </HeadingContainer>
 
           <ClockComponent
             currentTime={currentTime}
-            maxTime={sequenceConfig[currentCycle].duration}
-            color={COLORS[sequenceConfig[currentCycle].type]}
+            maxTime={pomodoroConfiguratin[currentCycle].duration}
+            color={COLORS[pomodoroConfiguratin[currentCycle].type]}
           />
 
           <Buttons>
