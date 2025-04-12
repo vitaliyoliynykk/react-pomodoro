@@ -13,11 +13,10 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { SequenceItem, SequenceType } from '@/shared/models';
-import { getConfig } from '@/store/slices/pomodoro-slice';
+import { getSettings } from '@/store/slices/settings-slice';
 import { AppDispatch, RootState } from '@/store/store';
 
 import { Buttons, Container, FormItem } from './styled-components';
-import { getSettings } from '@/store/slices/settings-slice';
 
 type Nullable<T> = {
   [K in keyof T]: T[K] | null;
