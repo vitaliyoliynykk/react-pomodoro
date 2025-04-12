@@ -2,11 +2,9 @@ import axios, { AxiosError } from 'axios';
 
 import { toaster } from '@/components/ui/toaster';
 import { ACCESS_TOKEN_KEY } from '@/shared/constants/tokens';
-import { ErrorResponseModel } from '@/shared/models/responses/error-response-model';
+import { MessageResponseModel } from '@/shared/models/responses/error-response-model';
 
 const baseURL = import.meta.env.VITE_API_URL as string;
-
-console.log('baseURL', baseURL);
 
 const api = axios.create({
   baseURL,
@@ -24,7 +22,7 @@ api.interceptors.request.use((config) => {
 
 api.interceptors.response.use(
   (res) => res,
-  (error: AxiosError<ErrorResponseModel>) => {
+  (error: AxiosError<MessageResponseModel>) => {
     toaster.create({
       description: error.response?.data.message ?? 'Unexpected error',
       type: 'error',

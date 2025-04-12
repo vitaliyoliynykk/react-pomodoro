@@ -1,9 +1,11 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+import { MessageResponseModel } from '@/shared/models/responses/error-response-model';
 import { SignInResponseModel } from '@/shared/models/responses/sign-in-response-model';
 import { UserResponseModel } from '@/shared/models/responses/user-response-model';
 import { getUserRequest } from '@/shared/requests/auth/getUserRequest';
 import { logOutRequest } from '@/shared/requests/auth/logOutRequest';
+import { registerRequest } from '@/shared/requests/auth/registerRequest';
 import { signInRequest } from '@/shared/requests/auth/signInRequest';
 
 interface UserState {
@@ -21,8 +23,11 @@ export const signIn = createAsyncThunk<
   { email: string; password: string }
 >('user/signIn', ({ email, password }) => signInRequest(email, password));
 export const logOut = createAsyncThunk('user/logOut', () => logOutRequest());
-
 export const getUser = createAsyncThunk('user/get', () => getUserRequest());
+export const registerUser = createAsyncThunk<
+  MessageResponseModel,
+  { email: string; password: string }
+>('user/register', ({ email, password }) => registerRequest(email, password));
 
 const userSlice = createSlice({
   name: 'user',

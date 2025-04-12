@@ -1,9 +1,15 @@
 import { Box, Button, Heading, Input, Text, VStack } from '@chakra-ui/react';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router';
 
+import { toaster } from '@/components/ui/toaster';
+import { registerUser } from '@/store/slices/user-slice';
+import { AppDispatch } from '@/store/store';
+
 const RegisterPage: FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
   const { register, handleSubmit, reset } = useForm<{
     email: string;
     password: string;
@@ -13,13 +19,20 @@ const RegisterPage: FC = () => {
 
   const navigate = useNavigate();
 
-  const onSubmit = handleSubmit((data) => {
-    const { email, password } = data;
-
-    localStorage.setItem('user', JSON.stringify({ email, password }));
-
-    void navigate('/sign-in');
-    reset();
+  const onSubmit = handleSubmit(({ email, password }) => {
+    dispatch(registerUser({ email, password }))
+      .unwrap()
+      .then(() => {
+        toaster.create({
+          type: 'success',
+          description: 'User created. You can sign in',
+          duration: 3000,
+        });
+        void navigate('/sign-in');
+      })
+      .catch(() => {
+        reset();
+      });
   });
 
   return (
