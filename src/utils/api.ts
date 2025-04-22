@@ -22,7 +22,36 @@ api.interceptors.request.use((config) => {
 
 api.interceptors.response.use(
   (res) => res,
-  (error: AxiosError<MessageResponseModel>) => {
+  async (error: AxiosError<MessageResponseModel>) => {
+    if (
+      error.response?.status === 401 &&
+      error.response.data.message === 'Not authorized'
+    ) {
+      try {
+        const refreshResponse = await api.post<{ accessToken: string }>(
+          'auth/refresh'
+        );
+
+        const newAccessToken = refreshResponse.data.accessToken;
+        localStorage.setItem(ACCESS_TOKEN_KEY, newAccessToken);
+
+        const originalRequest = { ...error.config };
+        if (typeof newAccessToken === 'string' && originalRequest.headers) {
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+
+          return await api(originalRequest);
+        }
+      } catch {
+        toaster.create({
+          description: 'Token refresh failure',
+          type: 'error',
+          duration: 3000,
+        });
+
+        return;
+      }
+    }
+
     toaster.create({
       description: error.response?.data.message ?? 'Unexpected error',
       type: 'error',
