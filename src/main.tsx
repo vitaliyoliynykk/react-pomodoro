@@ -1,10 +1,11 @@
 import './index.css';
 
-import { ChakraProvider, defaultSystem } from '@chakra-ui/react';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
+
+import { Provider as ChakraProvider } from '@/components/ui/provider';
 
 import App from './App.tsx';
 import { store } from './store/store.ts';
@@ -15,7 +16,7 @@ if (root) {
   createRoot(root).render(
     <StrictMode>
       <BrowserRouter>
-        <ChakraProvider value={defaultSystem}>
+        <ChakraProvider>
           <Provider store={store}>
             <App />
           </Provider>

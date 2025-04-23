@@ -8,7 +8,7 @@ import {
   Toast,
   Toaster as ChakraToaster,
 } from '@chakra-ui/react';
-
+// eslint-disable-next-line
 export const toaster = createToaster({
   placement: 'bottom-end',
   pauseOnPageIdle: true,

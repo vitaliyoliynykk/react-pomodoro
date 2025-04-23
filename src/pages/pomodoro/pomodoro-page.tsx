@@ -25,7 +25,9 @@ import {
   ControlButton,
   Heading,
   HeadingContainer,
+  TasksContainer,
 } from './styled-components';
+import { TaskSelector } from './task-selector/task-selector';
 
 function PomodoroPage() {
   const workerRef = useRef<Worker | null>(null);
@@ -133,7 +135,6 @@ function PomodoroPage() {
 
           <Buttons>
             <ControlButton
-              variant="subtle"
               colorPalette={'teal'}
               onClick={() => {
                 handleStartStop(isClockRunning);
@@ -150,6 +151,10 @@ function PomodoroPage() {
               Skip
             </ControlButton>
           </Buttons>
+          <TasksContainer>
+            <TaskSelector />
+            <ControlButton variant="solid">Add</ControlButton>
+          </TasksContainer>
         </ClockContainer>
       </Container>
     );

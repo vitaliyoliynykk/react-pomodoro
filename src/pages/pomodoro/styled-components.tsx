@@ -28,15 +28,14 @@ export const Buttons = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
+  gap: 8px;
   margin-top: 24px;
+  margin-bottom: 24px;
 `;
 
 export const ControlButton = styled(Button)`
-  width: 50%;
-
-  &:first-of-type {
-    margin-right: 8px;
-  }
+  display: block;
+  flex-grow: 1;
 `;
 
 export const Container = styled.div`
@@ -44,4 +43,10 @@ export const Container = styled.div`
   height: 100%;
   align-items: center;
   justify-content: center;
+`;
+
+export const TasksContainer = styled.div`
+  display: flex;
+  width: 100%;
+  gap: 8px;
 `;
