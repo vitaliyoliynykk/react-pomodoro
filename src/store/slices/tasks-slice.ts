@@ -1,22 +1,27 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { TaskModel } from '@/shared/models/responses/task-respose-model';
+import {
+  CreateTaskModel,
+  TaskModel,
+} from '@/shared/models/responses/task-respose-model';
 import { addTaskRequest } from '@/shared/requests/tasks/addTaskRequest';
 import { getTasksRequest } from '@/shared/requests/tasks/getTasksRequest';
 
 interface TasksState {
   status: 'loading' | 'complete' | 'error' | 'empty';
   tasks: TaskModel[];
+  selectedTask: TaskModel | null;
 }
 
 const initialState: TasksState = {
   status: 'complete',
   tasks: [],
+  selectedTask: null,
 };
 
 export const getTasks = createAsyncThunk('tasks/get', () => getTasksRequest());
 
-export const addTask = createAsyncThunk<TaskModel, TaskModel>(
+export const addTask = createAsyncThunk<TaskModel, CreateTaskModel>(
   'tasks/add',
   (task) => addTaskRequest(task)
 );
@@ -24,7 +29,15 @@ export const addTask = createAsyncThunk<TaskModel, TaskModel>(
 const tasksSlice = createSlice({
   name: 'tasks',
   initialState,
-  reducers: {},
+  reducers: {
+    selectTask(state, action: PayloadAction<string>) {
+      state.selectedTask =
+        state.tasks.find((task) => task._id == action.payload) ?? null;
+    },
+    clearSelectedTask(state) {
+      state.selectedTask = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getTasks.pending, (state) => {
@@ -55,6 +68,8 @@ const tasksSlice = createSlice({
       });
   },
 });
+
+export const { selectTask, clearSelectedTask } = tasksSlice.actions;
 
 const tasksReducer = tasksSlice.reducer;
 

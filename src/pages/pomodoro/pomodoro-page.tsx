@@ -17,6 +17,7 @@ import { AppDispatch, RootState } from '@/store/store';
 import { formatTime } from '@/utils/time';
 import TimerWorker from '@/workers/timerWorker.js?worker';
 
+import { CompletedBlock } from './completed-block/completed-block';
 import { COLORS, HEADINGS } from './constants';
 import {
   Buttons,
@@ -37,8 +38,9 @@ function PomodoroPage() {
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const { currentCycle, currentTime, completedToday, isClockRunning } =
-    useSelector((state: RootState) => state.pomodoro);
+  const { currentCycle, currentTime, isClockRunning } = useSelector(
+    (state: RootState) => state.pomodoro
+  );
   const {
     status,
     settings: { pomodoroConfiguratin },
@@ -125,7 +127,7 @@ function PomodoroPage() {
             <Heading>
               {HEADINGS[pomodoroConfiguratin[currentCycle].type]}
             </Heading>
-            <div>Completed: {completedToday}</div>
+            <CompletedBlock />
           </HeadingContainer>
 
           <ClockComponent
