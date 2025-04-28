@@ -1,11 +1,12 @@
 import { Spinner } from '@chakra-ui/react';
-import { RefObject, useEffect, useRef } from 'react';
+import { RefObject, useCallback, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import clickSound from '@/assets/sounds/click.mp3';
 import alarmSound from '@/assets/sounds/clock-alarm.mp3';
 import ClockComponent from '@/shared/components/clock/clock-component';
 import { Sequence, SequenceType } from '@/shared/models';
+import { TaskModel } from '@/shared/models/responses/task-respose-model';
 import {
   clockTick,
   nextCycle,
@@ -13,6 +14,7 @@ import {
   stopClock,
 } from '@/store/slices/pomodoro-slice';
 import { getSettings } from '@/store/slices/settings-slice';
+import { updateCompleted } from '@/store/slices/tasks-slice';
 import { AppDispatch, RootState } from '@/store/store';
 import { formatTime } from '@/utils/time';
 import TimerWorker from '@/workers/timerWorker.js?worker';
@@ -41,10 +43,28 @@ function PomodoroPage() {
   const { currentCycle, currentTime, isClockRunning } = useSelector(
     (state: RootState) => state.pomodoro
   );
+  const { selectedTask } = useSelector((state: RootState) => state.tasks);
   const {
     status,
     settings: { pomodoroConfiguratin },
   } = useSelector((state: RootState) => state.settings);
+
+  const updateTaskCompletedValue = useCallback(
+    (selectedTask: TaskModel | null) => {
+      if (
+        pomodoroConfiguratin[currentCycle].type === SequenceType.POMODORO &&
+        selectedTask?._id
+      ) {
+        void dispatch(
+          updateCompleted({
+            taskId: selectedTask._id,
+            completed: (selectedTask.sessions_completed ?? 0) + 1,
+          })
+        );
+      }
+    },
+    [dispatch, currentCycle, pomodoroConfiguratin]
+  );
 
   useEffect(() => {
     void dispatch(getSettings());
@@ -67,9 +87,28 @@ function PomodoroPage() {
       playSound(alarmAudioRef);
       workerRef.current?.postMessage('stop');
       dispatch(stopClock());
+      updateTaskCompletedValue(selectedTask);
+      // if (
+      //   pomodoroConfiguratin[currentCycle].type === SequenceType.POMODORO &&
+      //   selectedTask?._id
+      // ) {
+      //   void dispatch(
+      //     updateCompleted({
+      //       taskId: selectedTask._id,
+      //       completed: selectedTask.sessions_completed ?? 0 + 1,
+      //     })
+      //   );
+      // }
       dispatch(nextCycle());
     }
-  }, [currentTime, dispatch]);
+  }, [
+    currentTime,
+    dispatch,
+    pomodoroConfiguratin,
+    currentCycle,
+    selectedTask,
+    updateTaskCompletedValue,
+  ]);
 
   const handleUpdateDocumentTitle = (
     currentCycle: number,
@@ -100,6 +139,7 @@ function PomodoroPage() {
   const skipClock = () => {
     playSound(clickAudioRef);
     handleStopClock();
+    updateTaskCompletedValue(selectedTask);
     dispatch(nextCycle());
   };
 

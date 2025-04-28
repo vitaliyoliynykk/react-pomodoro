@@ -1,11 +1,13 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+import { UpdateCompletedRequestModel } from '@/shared/models/requests/update-completed-request-model';
 import {
   CreateTaskModel,
   TaskModel,
 } from '@/shared/models/responses/task-respose-model';
 import { addTaskRequest } from '@/shared/requests/tasks/addTaskRequest';
 import { getTasksRequest } from '@/shared/requests/tasks/getTasksRequest';
+import { updateCompletedRequest } from '@/shared/requests/tasks/updateCompletedRequest';
 
 interface TasksState {
   status: 'loading' | 'complete' | 'error' | 'empty';
@@ -25,6 +27,11 @@ export const addTask = createAsyncThunk<TaskModel, CreateTaskModel>(
   'tasks/add',
   (task) => addTaskRequest(task)
 );
+
+export const updateCompleted = createAsyncThunk<
+  TaskModel,
+  UpdateCompletedRequestModel
+>('tasks/updateCompleted', (body) => updateCompletedRequest(body));
 
 const tasksSlice = createSlice({
   name: 'tasks',
@@ -64,6 +71,30 @@ const tasksSlice = createSlice({
         state.tasks.push(action.payload);
       })
       .addCase(addTask.rejected, (state) => {
+        state.status = 'error';
+      });
+
+    builder
+      .addCase(updateCompleted.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(
+        updateCompleted.fulfilled,
+        (state, action: PayloadAction<TaskModel>) => {
+          state.status = 'complete';
+
+          const taskToUpdate = state.tasks.find(
+            (task) => task._id === action.payload._id
+          );
+
+          if (taskToUpdate && state.selectedTask) {
+            taskToUpdate.sessions_completed = action.payload.sessions_completed;
+            state.selectedTask.sessions_completed =
+              action.payload.sessions_completed;
+          }
+        }
+      )
+      .addCase(updateCompleted.rejected, (state) => {
         state.status = 'error';
       });
   },
