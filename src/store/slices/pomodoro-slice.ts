@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { Sequence, SequenceType } from '@/shared/models';
-import { SettinsResponseModel } from '@/shared/models/responses/settings-response-model';
+import { SettingsResponseModel } from '@/shared/models/responses/settings-response-model';
 
 import { RootState } from '../store';
 import { getSettings } from './settings-slice';
@@ -58,7 +58,7 @@ const pomodoroSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(
       getSettings.fulfilled,
-      (state, action: PayloadAction<SettinsResponseModel>) => {
+      (state, action: PayloadAction<SettingsResponseModel>) => {
         state.pomodoroConfig = action.payload.pomodoroConfiguration;
         state.currentTime = state.pomodoroConfig[state.currentCycle].duration;
       }

@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 
 import { pomodoroReducer } from './slices/pomodoro-slice';
 import { settingsReducer } from './slices/settings-slice';
+import { tasksReducer } from './slices/tasks-slice';
 import { userReducer } from './slices/user-slice';
 
 export const store = configureStore({
@@ -9,6 +10,7 @@ export const store = configureStore({
     pomodoro: pomodoroReducer,
     user: userReducer,
     settings: settingsReducer,
+    tasks: tasksReducer,
   },
 });
 

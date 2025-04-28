@@ -1,4 +1,4 @@
-import { Button, Dialog, Portal, Spinner } from '@chakra-ui/react';
+import { Spinner } from '@chakra-ui/react';
 import { RefObject, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -27,6 +27,7 @@ import {
   HeadingContainer,
   TasksContainer,
 } from './styled-components';
+import { TaskCreatorDialog } from './task-creator-dialog/task-creator-dialog';
 import { TaskSelector } from './task-selector/task-selector';
 
 function PomodoroPage() {
@@ -153,29 +154,7 @@ function PomodoroPage() {
           </Buttons>
           <TasksContainer>
             <TaskSelector />
-            {/* TODO: Move to separate component */}
-            <Dialog.Root>
-              <Dialog.Trigger asChild>
-                <ControlButton variant="solid">Add</ControlButton>
-              </Dialog.Trigger>
-              <Portal>
-                <Dialog.Backdrop />
-                <Dialog.Positioner>
-                  <Dialog.Content style={{ width: '90%' }}>
-                    <Dialog.Header>
-                      <Dialog.Title>Add a new task</Dialog.Title>
-                    </Dialog.Header>
-                    <Dialog.Body></Dialog.Body>
-                    <Dialog.Footer>
-                      <Dialog.ActionTrigger asChild>
-                        <Button variant="outline">Cancel</Button>
-                      </Dialog.ActionTrigger>
-                      <Button>Save</Button>
-                    </Dialog.Footer>
-                  </Dialog.Content>
-                </Dialog.Positioner>
-              </Portal>
-            </Dialog.Root>
+            <TaskCreatorDialog />
           </TasksContainer>
         </ClockContainer>
       </Container>
