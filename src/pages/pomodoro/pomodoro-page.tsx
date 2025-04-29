@@ -58,7 +58,6 @@ function PomodoroPage() {
 
   const updateTaskCompletedValue = useCallback(
     (selectedTask: TaskModel | null, statistics: StatisticResponseModel[]) => {
-      console.log(selectedTask);
       if (
         pomodoroConfiguratin[currentCycle].type === SequenceType.POMODORO &&
         selectedTask?._id &&
