@@ -6,6 +6,7 @@ import clickSound from '@/assets/sounds/click.mp3';
 import alarmSound from '@/assets/sounds/clock-alarm.mp3';
 import ClockComponent from '@/shared/components/clock/clock-component';
 import { Sequence, SequenceType } from '@/shared/models';
+import { StatisticResponseModel } from '@/shared/models/responses/statistic-response-model';
 import { TaskModel } from '@/shared/models/responses/task-respose-model';
 import {
   clockTick,
@@ -14,7 +15,10 @@ import {
   stopClock,
 } from '@/store/slices/pomodoro-slice';
 import { getSettings } from '@/store/slices/settings-slice';
-import { updateCompleted } from '@/store/slices/tasks-slice';
+import {
+  getStatisticsForUser,
+  updateTaskStatistic,
+} from '@/store/slices/statistics-slice';
 import { AppDispatch, RootState } from '@/store/store';
 import { formatTime } from '@/utils/time';
 import TimerWorker from '@/workers/timerWorker.js?worker';
@@ -48,17 +52,28 @@ function PomodoroPage() {
     status,
     settings: { pomodoroConfiguratin },
   } = useSelector((state: RootState) => state.settings);
+  const { statistics } = useSelector((state: RootState) => state.statistics);
 
   const updateTaskCompletedValue = useCallback(
-    (selectedTask: TaskModel | null) => {
+    (selectedTask: TaskModel | null, statistics: StatisticResponseModel[]) => {
+      console.log(selectedTask);
       if (
         pomodoroConfiguratin[currentCycle].type === SequenceType.POMODORO &&
-        selectedTask?._id
+        selectedTask?._id &&
+        selectedTask.sessions_goal
       ) {
+        const completed =
+          statistics.find((item) => item.task_id === selectedTask._id)
+            ?.total_sessions ?? 0;
+
+        const completedNext = completed + 1;
+
         void dispatch(
-          updateCompleted({
+          updateTaskStatistic({
             taskId: selectedTask._id,
-            completed: (selectedTask.sessions_completed ?? 0) + 1,
+            completed: completedNext,
+            goalReached:
+              completedNext > 0 && completedNext >= selectedTask.sessions_goal,
           })
         );
       }
@@ -68,6 +83,7 @@ function PomodoroPage() {
 
   useEffect(() => {
     void dispatch(getSettings());
+    void dispatch(getStatisticsForUser());
 
     workerRef.current = new TimerWorker();
 
@@ -87,18 +103,7 @@ function PomodoroPage() {
       playSound(alarmAudioRef);
       workerRef.current?.postMessage('stop');
       dispatch(stopClock());
-      updateTaskCompletedValue(selectedTask);
-      // if (
-      //   pomodoroConfiguratin[currentCycle].type === SequenceType.POMODORO &&
-      //   selectedTask?._id
-      // ) {
-      //   void dispatch(
-      //     updateCompleted({
-      //       taskId: selectedTask._id,
-      //       completed: selectedTask.sessions_completed ?? 0 + 1,
-      //     })
-      //   );
-      // }
+      updateTaskCompletedValue(selectedTask, statistics);
       dispatch(nextCycle());
     }
   }, [
@@ -108,6 +113,7 @@ function PomodoroPage() {
     currentCycle,
     selectedTask,
     updateTaskCompletedValue,
+    statistics,
   ]);
 
   const handleUpdateDocumentTitle = (
@@ -139,7 +145,7 @@ function PomodoroPage() {
   const skipClock = () => {
     playSound(clickAudioRef);
     handleStopClock();
-    updateTaskCompletedValue(selectedTask);
+    updateTaskCompletedValue(selectedTask, statistics);
     dispatch(nextCycle());
   };
 

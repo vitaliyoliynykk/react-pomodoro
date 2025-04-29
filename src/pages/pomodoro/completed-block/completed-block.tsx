@@ -8,20 +8,25 @@ import { Container } from './styled-components';
 export const CompletedBlock = () => {
   const { selectedTask } = useSelector((state: RootState) => state.tasks);
   const { completedToday } = useSelector((state: RootState) => state.pomodoro);
+  const { statistics } = useSelector((state: RootState) => state.statistics);
 
   if (!selectedTask) {
     return <div>Completed Today - {completedToday}</div>;
   }
 
+  const taskStatistcs = statistics.find(
+    (item) => item.task_id === selectedTask._id
+  );
+
   const percentage =
-    selectedTask.sessions_completed && selectedTask.sessions_goal
-      ? selectedTask.sessions_completed / (selectedTask.sessions_goal / 100)
+    taskStatistcs?.total_sessions && selectedTask.sessions_goal
+      ? taskStatistcs.total_sessions / (selectedTask.sessions_goal / 100)
       : 0;
 
   return (
     <Container>
       <p>
-        Daily Goal - {selectedTask.sessions_completed ?? 0}/
+        Daily Goal - {taskStatistcs?.total_sessions ?? 0}/
         {selectedTask.sessions_goal}
       </p>
 
