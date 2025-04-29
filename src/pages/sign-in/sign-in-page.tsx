@@ -67,15 +67,15 @@ const SignInPage: FC = () => {
         width="400px"
         textAlign="center"
       >
-        <Heading size="md" mb={4}>
-          Sign In
+        <Heading size="xl" mb={4} color="black">
+          Flow Track
         </Heading>
 
         <VStack>
           <Input
             type="email"
             placeholder="Email"
-            color="black"
+            variant="subtle"
             {...register('email', {
               required: 'Email is required',
             })}
@@ -84,16 +84,16 @@ const SignInPage: FC = () => {
           <Input
             type="password"
             placeholder="Password"
-            color="black"
+            variant="subtle"
             {...register('password', {
               required: 'Password is required',
             })}
           />
 
           <Button
-            colorScheme="blue"
             width="100%"
             type="submit"
+            colorPalette={'teal'}
             onClick={() => {
               void onSubmit();
             }}

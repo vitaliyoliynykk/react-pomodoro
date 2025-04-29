@@ -1,8 +1,8 @@
-import { SettinsResponseModel } from '@/shared/models/responses/settings-response-model';
+import { SettingsResponseModel } from '@/shared/models/responses/settings-response-model';
 import api from '@/utils/api';
 
-export const getSettingsRequest = async (): Promise<SettinsResponseModel> => {
-  const res = await api.get<SettinsResponseModel>('settings');
+export const getSettingsRequest = async (): Promise<SettingsResponseModel> => {
+  const res = await api.get<SettingsResponseModel>('settings');
 
   return res.data;
 };

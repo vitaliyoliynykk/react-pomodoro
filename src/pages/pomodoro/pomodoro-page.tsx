@@ -1,11 +1,14 @@
-import { Button, Dialog, Portal, Spinner } from '@chakra-ui/react';
-import { RefObject, useEffect, useRef } from 'react';
+import { Spinner } from '@chakra-ui/react';
+import { RefObject, useCallback, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import clickSound from '@/assets/sounds/click.mp3';
 import alarmSound from '@/assets/sounds/clock-alarm.mp3';
 import ClockComponent from '@/shared/components/clock/clock-component';
+import { useAuth } from '@/shared/context/auth-context';
 import { Sequence, SequenceType } from '@/shared/models';
+import { StatisticResponseModel } from '@/shared/models/responses/statistic-response-model';
+import { TaskModel } from '@/shared/models/responses/task-respose-model';
 import {
   clockTick,
   nextCycle,
@@ -13,10 +16,15 @@ import {
   stopClock,
 } from '@/store/slices/pomodoro-slice';
 import { getSettings } from '@/store/slices/settings-slice';
+import {
+  getStatisticsForUser,
+  updateTaskStatistic,
+} from '@/store/slices/statistics-slice';
 import { AppDispatch, RootState } from '@/store/store';
 import { formatTime } from '@/utils/time';
 import TimerWorker from '@/workers/timerWorker.js?worker';
 
+import { CompletedBlock } from './completed-block/completed-block';
 import { COLORS, HEADINGS } from './constants';
 import {
   Buttons,
@@ -27,6 +35,7 @@ import {
   HeadingContainer,
   TasksContainer,
 } from './styled-components';
+import { TaskCreatorDialog } from './task-creator-dialog/task-creator-dialog';
 import { TaskSelector } from './task-selector/task-selector';
 
 function PomodoroPage() {
@@ -35,16 +44,49 @@ function PomodoroPage() {
   const alarmAudioRef = useRef(new Audio(alarmSound));
 
   const dispatch = useDispatch<AppDispatch>();
+  const { user } = useAuth();
 
-  const { currentCycle, currentTime, completedToday, isClockRunning } =
-    useSelector((state: RootState) => state.pomodoro);
+  const { currentCycle, currentTime, isClockRunning } = useSelector(
+    (state: RootState) => state.pomodoro
+  );
+  const { selectedTask } = useSelector((state: RootState) => state.tasks);
   const {
     status,
     settings: { pomodoroConfiguratin },
   } = useSelector((state: RootState) => state.settings);
+  const { statistics } = useSelector((state: RootState) => state.statistics);
+
+  const updateTaskCompletedValue = useCallback(
+    (selectedTask: TaskModel | null, statistics: StatisticResponseModel[]) => {
+      if (
+        pomodoroConfiguratin[currentCycle].type === SequenceType.POMODORO &&
+        selectedTask?._id &&
+        selectedTask.sessions_goal
+      ) {
+        const completed =
+          statistics.find((item) => item.task_id === selectedTask._id)
+            ?.total_sessions ?? 0;
+
+        const completedNext = completed + 1;
+
+        void dispatch(
+          updateTaskStatistic({
+            taskId: selectedTask._id,
+            completed: completedNext,
+            goalReached:
+              completedNext > 0 && completedNext >= selectedTask.sessions_goal,
+          })
+        );
+      }
+    },
+    [dispatch, currentCycle, pomodoroConfiguratin]
+  );
 
   useEffect(() => {
-    void dispatch(getSettings());
+    if (user) {
+      void dispatch(getSettings());
+      void dispatch(getStatisticsForUser());
+    }
 
     workerRef.current = new TimerWorker();
 
@@ -53,7 +95,7 @@ function PomodoroPage() {
     };
 
     return () => workerRef.current?.terminate();
-  }, [dispatch]);
+  }, [dispatch, user]);
 
   useEffect(() => {
     handleUpdateDocumentTitle(currentCycle, currentTime, pomodoroConfiguratin);
@@ -64,9 +106,18 @@ function PomodoroPage() {
       playSound(alarmAudioRef);
       workerRef.current?.postMessage('stop');
       dispatch(stopClock());
+      updateTaskCompletedValue(selectedTask, statistics);
       dispatch(nextCycle());
     }
-  }, [currentTime, dispatch]);
+  }, [
+    currentTime,
+    dispatch,
+    pomodoroConfiguratin,
+    currentCycle,
+    selectedTask,
+    updateTaskCompletedValue,
+    statistics,
+  ]);
 
   const handleUpdateDocumentTitle = (
     currentCycle: number,
@@ -97,6 +148,7 @@ function PomodoroPage() {
   const skipClock = () => {
     playSound(clickAudioRef);
     handleStopClock();
+    updateTaskCompletedValue(selectedTask, statistics);
     dispatch(nextCycle());
   };
 
@@ -124,15 +176,13 @@ function PomodoroPage() {
             <Heading>
               {HEADINGS[pomodoroConfiguratin[currentCycle].type]}
             </Heading>
-            <div>Completed: {completedToday}</div>
+            <CompletedBlock />
           </HeadingContainer>
-
           <ClockComponent
             currentTime={currentTime}
             maxTime={pomodoroConfiguratin[currentCycle].duration}
             color={COLORS[pomodoroConfiguratin[currentCycle].type]}
           />
-
           <Buttons>
             <ControlButton
               colorPalette={'teal'}
@@ -151,32 +201,11 @@ function PomodoroPage() {
               Skip
             </ControlButton>
           </Buttons>
-          <TasksContainer>
-            <TaskSelector />
-            {/* TODO: Move to separate component */}
-            <Dialog.Root>
-              <Dialog.Trigger asChild>
-                <ControlButton variant="solid">Add</ControlButton>
-              </Dialog.Trigger>
-              <Portal>
-                <Dialog.Backdrop />
-                <Dialog.Positioner>
-                  <Dialog.Content style={{ width: '90%' }}>
-                    <Dialog.Header>
-                      <Dialog.Title>Add a new task</Dialog.Title>
-                    </Dialog.Header>
-                    <Dialog.Body></Dialog.Body>
-                    <Dialog.Footer>
-                      <Dialog.ActionTrigger asChild>
-                        <Button variant="outline">Cancel</Button>
-                      </Dialog.ActionTrigger>
-                      <Button>Save</Button>
-                    </Dialog.Footer>
-                  </Dialog.Content>
-                </Dialog.Positioner>
-              </Portal>
-            </Dialog.Root>
-          </TasksContainer>
+          {!!user && (
+            <TasksContainer>
+              <TaskSelector /> <TaskCreatorDialog />
+            </TasksContainer>
+          )}
         </ClockContainer>
       </Container>
     );

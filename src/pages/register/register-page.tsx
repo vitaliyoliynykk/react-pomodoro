@@ -52,15 +52,15 @@ const RegisterPage: FC = () => {
         width="400px"
         textAlign="center"
       >
-        <Heading size="md" mb={4}>
-          Register
+        <Heading size="xl" mb={4}>
+          Flow Track
         </Heading>
 
         <VStack>
           <Input
             type="email"
             placeholder="Email"
-            color="black"
+            variant="subtle"
             {...register('email', {
               required: 'Email is required',
             })}
@@ -69,7 +69,7 @@ const RegisterPage: FC = () => {
           <Input
             type="password"
             placeholder="Password"
-            color="black"
+            variant="subtle"
             {...register('password', {
               required: 'Password is required',
             })}
@@ -79,6 +79,7 @@ const RegisterPage: FC = () => {
             colorScheme="blue"
             width="100%"
             type="submit"
+            colorPalette={'teal'}
             onClick={() => {
               void onSubmit();
             }}

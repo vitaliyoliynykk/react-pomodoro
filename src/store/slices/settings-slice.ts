@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { DEFAULT_SEQUENCE_CONFIG } from '@/shared/constants/sequence-config';
 import { Sequence } from '@/shared/models';
-import { SettinsResponseModel } from '@/shared/models/responses/settings-response-model';
+import { SettingsResponseModel } from '@/shared/models/responses/settings-response-model';
 import { getSettingsRequest } from '@/shared/requests/settings/getSettingsRequset';
 import { updateSettingsRequest } from '@/shared/requests/settings/updateSettingsRequest';
 
@@ -27,8 +27,8 @@ export const getSettings = createAsyncThunk('settings/get', () =>
 );
 
 export const updateSettings = createAsyncThunk<
-  SettinsResponseModel,
-  SettinsResponseModel
+  SettingsResponseModel,
+  SettingsResponseModel
 >('settings/update', ({ pushNotificationsEnabled, pomodoroConfiguration }) =>
   updateSettingsRequest(pushNotificationsEnabled, pomodoroConfiguration)
 );
@@ -44,7 +44,7 @@ const settingsSlice = createSlice({
       })
       .addCase(
         getSettings.fulfilled,
-        (state, action: PayloadAction<SettinsResponseModel>) => {
+        (state, action: PayloadAction<SettingsResponseModel>) => {
           state.status = 'complete';
 
           state.settings.pomodoroConfiguratin =
@@ -63,7 +63,7 @@ const settingsSlice = createSlice({
       })
       .addCase(
         updateSettings.fulfilled,
-        (state, action: PayloadAction<SettinsResponseModel>) => {
+        (state, action: PayloadAction<SettingsResponseModel>) => {
           state.status = 'complete';
 
           state.settings.pomodoroConfiguratin =

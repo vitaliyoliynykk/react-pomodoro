@@ -9,6 +9,7 @@ export const HeadingContainer = styled.div`
   margin-bottom: 24px;
   padding: 12px 0px;
   text-align: center;
+  height: 120px;
 `;
 
 export const Heading = styled.h1`
