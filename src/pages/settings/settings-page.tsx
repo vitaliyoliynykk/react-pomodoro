@@ -117,7 +117,6 @@ function SettingsPage() {
 
         <Buttons>
           <Button
-            variant="subtle"
             colorPalette={'teal'}
             onClick={() => {
               append({ duration: null, type: null });
@@ -126,7 +125,6 @@ function SettingsPage() {
             Add Input
           </Button>
           <Button
-            colorPalette={'teal'}
             onClick={() => {
               void onSubmit();
             }}
