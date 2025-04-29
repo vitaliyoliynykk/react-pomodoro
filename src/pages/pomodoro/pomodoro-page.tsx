@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import clickSound from '@/assets/sounds/click.mp3';
 import alarmSound from '@/assets/sounds/clock-alarm.mp3';
 import ClockComponent from '@/shared/components/clock/clock-component';
+import { useAuth } from '@/shared/context/auth-context';
 import { Sequence, SequenceType } from '@/shared/models';
 import { StatisticResponseModel } from '@/shared/models/responses/statistic-response-model';
 import { TaskModel } from '@/shared/models/responses/task-respose-model';
@@ -43,6 +44,7 @@ function PomodoroPage() {
   const alarmAudioRef = useRef(new Audio(alarmSound));
 
   const dispatch = useDispatch<AppDispatch>();
+  const { user } = useAuth();
 
   const { currentCycle, currentTime, isClockRunning } = useSelector(
     (state: RootState) => state.pomodoro
@@ -82,8 +84,10 @@ function PomodoroPage() {
   );
 
   useEffect(() => {
-    void dispatch(getSettings());
-    void dispatch(getStatisticsForUser());
+    if (user) {
+      void dispatch(getSettings());
+      void dispatch(getStatisticsForUser());
+    }
 
     workerRef.current = new TimerWorker();
 
@@ -92,7 +96,7 @@ function PomodoroPage() {
     };
 
     return () => workerRef.current?.terminate();
-  }, [dispatch]);
+  }, [dispatch, user]);
 
   useEffect(() => {
     handleUpdateDocumentTitle(currentCycle, currentTime, pomodoroConfiguratin);
@@ -175,13 +179,11 @@ function PomodoroPage() {
             </Heading>
             <CompletedBlock />
           </HeadingContainer>
-
           <ClockComponent
             currentTime={currentTime}
             maxTime={pomodoroConfiguratin[currentCycle].duration}
             color={COLORS[pomodoroConfiguratin[currentCycle].type]}
           />
-
           <Buttons>
             <ControlButton
               colorPalette={'teal'}
@@ -200,10 +202,11 @@ function PomodoroPage() {
               Skip
             </ControlButton>
           </Buttons>
-          <TasksContainer>
-            <TaskSelector />
-            <TaskCreatorDialog />
-          </TasksContainer>
+          {!!user && (
+            <TasksContainer>
+              <TaskSelector /> <TaskCreatorDialog />
+            </TasksContainer>
+          )}
         </ClockContainer>
       </Container>
     );
