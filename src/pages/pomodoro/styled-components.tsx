@@ -15,7 +15,7 @@ export const HeadingContainer = styled('div')(({ theme }) => ({
 export const Heading = styled.h1`
   font-weight: bold;
   width: 100%;
-  font-size: 32px;
+  font-size: ${({ theme }) => theme.fontSize.xlg};
 `;
 
 export const ClockContainer = styled.div`
@@ -37,7 +37,7 @@ export const Buttons = styled('div')(({ theme }) => ({
 export const ControlButton = styled(Button)`
   display: block;
   flex-grow: 1;
-  font-size: 16px;
+  font-size: ${({ theme }) => theme.fontSize.base};
 `;
 
 export const Container = styled.div`

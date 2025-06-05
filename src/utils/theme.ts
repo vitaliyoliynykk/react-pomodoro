@@ -12,6 +12,10 @@ export const theme = {
     medium: '8px',
     round: '50%',
   },
+  fontSize: {
+    base: '1rem',
+    xlg: '2rem',
+  },
 };
 
 export type ThemeType = typeof theme;
