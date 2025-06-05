@@ -37,6 +37,7 @@ export const Buttons = styled.div`
 export const ControlButton = styled(Button)`
   display: block;
   flex-grow: 1;
+  font-size: 16px;
 `;
 
 export const Container = styled.div`

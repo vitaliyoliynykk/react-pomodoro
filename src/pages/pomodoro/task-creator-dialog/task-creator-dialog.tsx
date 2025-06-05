@@ -56,6 +56,7 @@ export const TaskCreatorDialog = () => {
     >
       <Dialog.Trigger asChild>
         <Button
+          style={{ fontSize: 16 }}
           onClick={() => {
             setIsOpen(true);
           }}

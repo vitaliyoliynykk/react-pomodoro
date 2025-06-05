@@ -44,13 +44,15 @@ const settingsSlice = createSlice({
       })
       .addCase(
         getSettings.fulfilled,
-        (state, action: PayloadAction<SettingsResponseModel>) => {
+        (state, action: PayloadAction<SettingsResponseModel | null>) => {
           state.status = 'complete';
 
-          state.settings.pomodoroConfiguratin =
-            action.payload.pomodoroConfiguration;
-          state.settings.pushNotificationEnabled =
-            action.payload.pushNotificationsEnabled;
+          if (action.payload) {
+            state.settings.pomodoroConfiguratin =
+              action.payload.pomodoroConfiguration;
+            state.settings.pushNotificationEnabled =
+              action.payload.pushNotificationsEnabled;
+          }
         }
       )
       .addCase(getSettings.rejected, (state) => {

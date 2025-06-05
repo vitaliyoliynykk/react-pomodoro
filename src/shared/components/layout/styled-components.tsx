@@ -15,7 +15,7 @@ export const LayoutContainer = styled.div`
 
 export const Sidebar = styled.aside`
   background-color: rgba(255, 255, 255, 0.2);
-  padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
+  padding: 8px 12px 16px;
 `;
 
 export const StyledNavLink = styled(NavLink)`
@@ -25,6 +25,10 @@ export const StyledNavLink = styled(NavLink)`
   display: block;
 
   &.active {
+    background-color: cadetblue;
+  }
+
+  &:hover {
     background-color: cadetblue;
   }
 

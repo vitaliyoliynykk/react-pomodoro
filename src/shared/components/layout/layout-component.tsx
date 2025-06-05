@@ -72,7 +72,7 @@ const Layout = () => {
             handleLinkClick(link);
           }}
         >
-          <Icon fontSize="2xl" color="white.700">
+          <Icon fontSize="4xl" color="white.700">
             {icon}
           </Icon>
         </StyledNavLink>
