@@ -1,8 +1,9 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { describe, expect, test } from 'vitest';
 
-import ClockComponent from './clock-component';
-import { ClockComponentPropsType } from './clock-component-props.type';
+import ClockComponent from '@/shared/components/clock/clock-component';
+import { ClockComponentPropsType } from '@/shared/components/clock/clock-component-props.type';
+import { renderWithProviders } from '@/utils/unit-tests';
 
 describe('ClockComponent', () => {
   let params: ClockComponentPropsType;
@@ -14,7 +15,7 @@ describe('ClockComponent', () => {
       maxTime: 1500,
     };
 
-    render(<ClockComponent {...params} />);
+    renderWithProviders(<ClockComponent {...params} />);
     const formattedTime = screen.getByTestId('formatted-time').textContent;
 
     const minutes = Math.floor(params.currentTime / 60).toString();
@@ -31,7 +32,7 @@ describe('ClockComponent', () => {
       maxTime: 1500,
     };
 
-    render(<ClockComponent {...params} />);
+    renderWithProviders(<ClockComponent {...params} />);
     const clock = screen.getByTestId('clock');
     const style = window.getComputedStyle(clock);
 
@@ -47,7 +48,7 @@ describe('ClockComponent', () => {
       color: 'rgb(255, 255, 255)',
     };
 
-    render(<ClockComponent {...params} />);
+    renderWithProviders(<ClockComponent {...params} />);
 
     const background = screen.getByTestId('clock-background');
     const style = window.getComputedStyle(background);
@@ -63,7 +64,7 @@ describe('ClockComponent', () => {
 
     const defaultColor = 'rgb(163, 21, 59)';
 
-    render(<ClockComponent {...params} />);
+    renderWithProviders(<ClockComponent {...params} />);
 
     const background = screen.getByTestId('clock-background');
     const style = window.getComputedStyle(background);

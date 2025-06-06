@@ -2,14 +2,13 @@ import { Box, Button, Input, Portal, Text } from '@chakra-ui/react';
 import { Dialog } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
 
 import { toaster } from '@/components/ui/toaster';
 import { addTask } from '@/store/slices/tasks-slice';
-import { AppDispatch } from '@/store/store';
+import { useAppDispatch } from '@/store/store';
 
 export const TaskCreatorDialog = () => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -56,6 +55,7 @@ export const TaskCreatorDialog = () => {
     >
       <Dialog.Trigger asChild>
         <Button
+          style={{ fontSize: 16 }}
           onClick={() => {
             setIsOpen(true);
           }}

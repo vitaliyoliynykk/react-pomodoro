@@ -9,18 +9,17 @@ import {
 } from '@chakra-ui/react';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router';
 
 import { ACCESS_TOKEN_KEY } from '@/shared/constants/tokens';
 import { useAuth } from '@/shared/context/auth-context';
 import { signIn } from '@/store/slices/user-slice';
-import { AppDispatch } from '@/store/store';
+import { useAppDispatch } from '@/store/store';
 
 const SignInPage: FC = () => {
   const navigate = useNavigate();
   const { setUser } = useAuth();
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   const {
     register,

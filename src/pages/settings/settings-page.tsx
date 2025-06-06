@@ -10,11 +10,10 @@ import {
 } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
 
 import { SequenceItem, SequenceType } from '@/shared/models';
 import { getSettings, updateSettings } from '@/store/slices/settings-slice';
-import { AppDispatch, RootState } from '@/store/store';
+import { useAppDispatch, useAppSelector } from '@/store/store';
 
 import { Buttons, Container, FormItem } from './styled-components';
 
@@ -23,12 +22,12 @@ type Nullable<T> = {
 };
 
 function SettingsPage() {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
-  const { pomodoroConfiguratin, pushNotificationEnabled } = useSelector(
-    (state: RootState) => state.settings.settings
+  const { pomodoroConfiguratin, pushNotificationEnabled } = useAppSelector(
+    ({ settings }) => settings.settings
   );
-  const status = useSelector((state: RootState) => state.settings.status);
+  const status = useAppSelector(({ settings }) => settings.status);
 
   const { register, handleSubmit, control, reset } = useForm<{
     items: Nullable<SequenceItem>[];
