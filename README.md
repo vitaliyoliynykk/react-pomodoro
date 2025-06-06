@@ -25,6 +25,7 @@ A **simple yet powerful Pomodoro timer** built with [React](https://react.dev/) 
 - 🚏 [React Router](https://reactrouter.com/)
 - 🎨 [Chakra UI](https://chakra-ui.com/)
 - 💅 [Emotion (CSS-in-JS)](https://emotion.sh/docs/introduction)
+- 🔤 [React Hook Form](https://react-hook-form.com/)
 
 ---
 
