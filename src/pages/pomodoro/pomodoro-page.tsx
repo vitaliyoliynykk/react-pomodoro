@@ -1,6 +1,5 @@
 import { Spinner } from '@chakra-ui/react';
 import { RefObject, useCallback, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 
 import clickSound from '@/assets/sounds/click.mp3';
 import alarmSound from '@/assets/sounds/clock-alarm.mp3';
@@ -20,7 +19,7 @@ import {
   getStatisticsForUser,
   updateTaskStatistic,
 } from '@/store/slices/statistics-slice';
-import { AppDispatch, RootState } from '@/store/store';
+import { useAppDispatch, useAppSelector } from '@/store/store';
 import { formatTime } from '@/utils/time';
 import TimerWorker from '@/workers/timerWorker.js?worker';
 
@@ -43,18 +42,18 @@ function PomodoroPage() {
   const clickAudioRef = useRef(new Audio(clickSound));
   const alarmAudioRef = useRef(new Audio(alarmSound));
 
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const { user } = useAuth();
 
-  const { currentCycle, currentTime, isClockRunning } = useSelector(
-    (state: RootState) => state.pomodoro
+  const { currentCycle, currentTime, isClockRunning } = useAppSelector(
+    (state) => state.pomodoro
   );
-  const { selectedTask } = useSelector((state: RootState) => state.tasks);
+  const { selectedTask } = useAppSelector((state) => state.tasks);
   const {
     status,
     settings: { pomodoroConfiguratin },
-  } = useSelector((state: RootState) => state.settings);
-  const { statistics } = useSelector((state: RootState) => state.statistics);
+  } = useAppSelector((state) => state.settings);
+  const { statistics } = useAppSelector((state) => state.statistics);
 
   const updateTaskCompletedValue = useCallback(
     (selectedTask: TaskModel | null, statistics: StatisticResponseModel[]) => {

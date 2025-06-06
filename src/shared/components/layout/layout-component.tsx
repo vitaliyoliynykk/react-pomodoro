@@ -3,13 +3,12 @@ import { useEffect, useMemo } from 'react';
 import { FaHome } from 'react-icons/fa';
 import { IoMdLogIn, IoMdLogOut } from 'react-icons/io';
 import { IoSettingsSharp } from 'react-icons/io5';
-import { useDispatch, useSelector } from 'react-redux';
 import { Outlet } from 'react-router';
 
 import { ACCESS_TOKEN_KEY } from '@/shared/constants/tokens';
 import { useAuth } from '@/shared/context/auth-context';
 import { getUser, logOut } from '@/store/slices/user-slice';
-import { AppDispatch, RootState } from '@/store/store';
+import { useAppDispatch, useAppSelector } from '@/store/store';
 
 import {
   Content,
@@ -27,9 +26,9 @@ const _navigation = [
 ];
 
 const Layout = () => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const { user: authUser, setUser } = useAuth();
-  const { user, status } = useSelector((state: RootState) => state.user);
+  const { user, status } = useAppSelector(({ user }) => user);
 
   useEffect(() => {
     if (authUser && !user && status !== 'loading') {

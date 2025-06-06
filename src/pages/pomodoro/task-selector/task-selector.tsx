@@ -1,16 +1,13 @@
 import { createListCollection, Portal, Select } from '@chakra-ui/react';
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 
 import { getTasks, selectTask } from '@/store/slices/tasks-slice';
-import { AppDispatch, RootState } from '@/store/store';
+import { useAppDispatch, useAppSelector } from '@/store/store';
 
 export const TaskSelector = () => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
-  const { tasks, selectedTask } = useSelector(
-    (state: RootState) => state.tasks
-  );
+  const { tasks, selectedTask } = useAppSelector(({ tasks }) => tasks);
 
   const tasksCollection = createListCollection({
     items: tasks.map(({ title, _id }) => ({ _id, label: title, value: _id })),

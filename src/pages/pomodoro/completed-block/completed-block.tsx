@@ -1,14 +1,13 @@
 import { Progress } from '@chakra-ui/react';
-import { useSelector } from 'react-redux';
 
-import { RootState } from '@/store/store';
+import { useAppSelector } from '@/store/store';
 
 import { Container } from './styled-components';
 
 export const CompletedBlock = () => {
-  const { selectedTask } = useSelector((state: RootState) => state.tasks);
-  const { completedToday } = useSelector((state: RootState) => state.pomodoro);
-  const { statistics } = useSelector((state: RootState) => state.statistics);
+  const { selectedTask } = useAppSelector(({ tasks }) => tasks);
+  const { completedToday } = useAppSelector(({ pomodoro }) => pomodoro);
+  const { statistics } = useAppSelector(({ statistics }) => statistics);
 
   if (!selectedTask) {
     return <div>Completed Today - {completedToday}</div>;

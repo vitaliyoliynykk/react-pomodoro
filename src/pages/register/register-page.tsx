@@ -1,15 +1,14 @@
 import { Box, Button, Heading, Input, Text, VStack } from '@chakra-ui/react';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router';
 
 import { toaster } from '@/components/ui/toaster';
 import { registerUser } from '@/store/slices/user-slice';
-import { AppDispatch } from '@/store/store';
+import { useAppDispatch } from '@/store/store';
 
 const RegisterPage: FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const { register, handleSubmit, reset } = useForm<{
     email: string;
     password: string;
