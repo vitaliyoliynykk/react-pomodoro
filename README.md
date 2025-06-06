@@ -7,13 +7,12 @@ A **simple yet powerful Pomodoro timer** built with [React](https://react.dev/) 
 ✅ **Predefined Pomodoro Configuration** – Work & break sessions set up for you!\
 🔔 **Sound Alerts** – Never miss your break or work session!\
 ⚙️ **Customizable Settings** – Adjust Pomodoro cycle durations as needed.\
-💾 **Offline Storage** – Saves progress using [IndexedDB](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API).
+🔐 **Authentication** – Track your sessions across devices.\
+🗄 **Cloud Sync** – Save progress in a database.\
 
 ### 🚀 **Upcoming Features**
 
-🔐 **Authentication** – Track your sessions across devices.\
 📊 **Statistics Dashboard** – See your productivity insights.\
-🗄 **Cloud Sync** – Save progress in a database.\
 📱 **PWA Support** – Use the app offline like a native app.
 
 ---
@@ -52,4 +51,3 @@ pnpm run dev
 ---
 
 🔗 **Contributions & Feedback Welcome!** 🚀🔥
-
