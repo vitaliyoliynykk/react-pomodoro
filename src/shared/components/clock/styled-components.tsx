@@ -28,10 +28,10 @@ export const ClockBackground = styled.div<{ color: string }>(({ color }) => ({
   position: 'absolute',
 }));
 
-export const Time = styled.div`
-  position: absolute;
-  top: calc(50% - 24px);
-  width: 100%;
-  font-size: 32px;
-  text-align: center;
-`;
+export const Time = styled.div(({ theme }) => ({
+  position: 'absolute',
+  top: 'calc(50% - 24px)',
+  width: '100%',
+  fontSize: theme.fontSize.xlg,
+  textAlign: 'center',
+}));
