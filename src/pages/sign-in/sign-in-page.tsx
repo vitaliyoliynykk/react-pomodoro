@@ -66,7 +66,7 @@ const SignInPage: FC = () => {
         width="400px"
         textAlign="center"
       >
-        <Heading size="xl" mb={4} color="black">
+        <Heading size="4xl" mb={4} color="black">
           Flow Track
         </Heading>
 
@@ -75,6 +75,7 @@ const SignInPage: FC = () => {
             type="email"
             placeholder="Email"
             variant="subtle"
+            size="lg"
             {...register('email', {
               required: 'Email is required',
             })}
@@ -84,6 +85,7 @@ const SignInPage: FC = () => {
             type="password"
             placeholder="Password"
             variant="subtle"
+            size="lg"
             {...register('password', {
               required: 'Password is required',
             })}
@@ -93,6 +95,7 @@ const SignInPage: FC = () => {
             width="100%"
             type="submit"
             colorPalette={'teal'}
+            size="lg"
             onClick={() => {
               void onSubmit();
             }}
